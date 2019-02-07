@@ -19,7 +19,6 @@ phone_regex = RegexValidator(regex=r'^\+?1?\d{10,13}$',
 
 class TblAgent(AbstractUser):
 
-   
     # Validating contact using phone_regex RegexValidator.
     ag_contact = models.CharField(validators=[phone_regex],
                                   null=False, blank=False,
@@ -31,8 +30,8 @@ class TblAgent(AbstractUser):
     # image of Agent
     ag_profile_image = models.ImageField(upload_to='agents/profiles',
                                          blank=True)
-    
-    #Overriding save method to save dafault user
+
+    # Overriding save method to save dafault user
     # def save(self, *args, **kwargs):
     #     self.is_active = False
     #     self.is_staff = False
@@ -48,8 +47,6 @@ class TblAgent(AbstractUser):
 
     def normal_save(self, *args, **kwargs):
         super(TblAgent, self).save(*args, **kwargs)
-
-
 
     class Meta:
         verbose_name_plural = 'Agent Details'
