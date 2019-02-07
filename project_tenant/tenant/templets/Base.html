@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tenant Management - 
+        {% block titleblock %}
+        Home
+        {% endblock %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Web site For Agents to provide property on rent to tenants." />
+    <meta name="author" content="" />
+
+    <!-- css -->
+    <link href="https://fonts.googleapis.com/css?family=Handlee|Open+Sans:300,400,600,700,800" rel="stylesheet" />
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet" />
+    <link href="{% static "css/bootstrap-responsive.css" %}" rel="stylesheet" />
+    <link href="{% static "css/flexslider.css" %}" rel="stylesheet" />
+    <link href="{% static "css/prettyPhoto.css" %}" rel="stylesheet" />
+    <link href="{% static "css/camera.css" %}" rel="stylesheet" />
+    <link href="{% static "css/jquery.bxslider.css" %}" rel="stylesheet" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <!-- <link href="../../static/css/style.css" rel="stylesheet" /> -->
+    <!-- Theme skin -->
+    <link href="{% static 'color/default.css' %}" rel="stylesheet" />
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png" />
+    <link rel="shortcut icon" href="ico/favicon.png" />
+
+   
+</head>
+<body>
+
+
+    <div id="wrapper">
+
+
+        <!-- start header -->
+        <header>
+            <div class="top">
+                <div class="container">
+                    <div class="row">
+                        <div class="span6"></div>
+                        <div class="span6">
+
+                            <ul class="social-network">
+                                <li><a href="#" data-placement="bottom" title="Facebook"><i class="icon-facebook icon-white"></i></a></li>
+                                <li><a href="#" data-placement="bottom" title="Twitter"><i class="icon-twitter icon-white"></i></a></li>
+                                <li><a href="#" data-placement="bottom" title="Linkedin"><i class="icon-linkedin icon-white"></i></a></li>
+                                <li><a href="#" data-placement="bottom" title="Pinterest"><i class="icon-pinterest  icon-white"></i></a></li>
+                                <li><a href="#" data-placement="bottom" title="Google +"><i class="icon-google-plus icon-white"></i></a></li>
+                                <li><a href="#" data-placement="bottom" title="Dribbble"><i class="icon-dribbble icon-white"></i></a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+
+
+                <div class="row nomargin">
+                    <div class="span4">
+                        <div class="logo">
+                           <h1> <a href="{% url 'index' %}">Home Renting<img src="{% static 'image/surfer.jpg' %}" height="70" width="100" /></a></h1>
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </header>
+        <!-- end header -->
+{% block bodyblock %}
+
+	<div  align="center">
+		<div style="background-image: url('images/bg-01.jpg');">
+			<div >
+				<form  method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+					<h2 class="title"><strong>Login</strong></h2>
+
+					<div data-validate = "Username is reauired">
+						<span >Username</span>
+						<input  type="text" name="username" placeholder="Type your username">
+						<span  data-symbol="&#xf206;"></span>
+					</div>
+
+					<div  data-validate="Password is required">
+						<span >Password</span>
+						<input type="password" name="password" placeholder="Type your password">
+						<span  data-symbol="&#xf190;"></span>
+					</div>
+					
+					<div >
+						<a href="#">
+							Forgot password?
+						</a>
+					</div>
+					
+					<div >
+						<div >
+							<div ></div>
+							<input type="submit" name="submit" value="Login" class="btn btn-theme btn-rounded animated fadeInUp">
+								
+						</div>
+					</div>
+
+
+                    <div >
+                            <a href="#">
+                                Register new Agent
+                            </a>
+                    </div>
+					
+                    <div >
+                            <a href="#">
+                                I am Tenant
+                            </a>
+                    </div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+
+{% endblock %}
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="span4">
+                        <div class="widget">
+                            <h5 class="widgetheading">Browse pages</h5>
+                            <ul class="link-list">
+                                <li><a href="#">Our company</a></li>
+                                <li><a href="#">Terms and conditions</a></li>
+                                <li><a href="#">Privacy policy</a></li>
+                                <li><a href="#">Press release</a></li>
+                                <li><a href="#">What we have done</a></li>
+                                <li><a href="#">Our support forum</a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="widget">
+                            <h5 class="widgetheading">Get in touch</h5>
+                            <address>
+                                <strong>Eterna company Inc.</strong><br>
+                                Somestreet 200 VW, Suite Village A.001<br>
+                                Jakarta 13426 Indonesia
+                            </address>
+                            <p>
+                                <i class="icon-phone"></i> (123) 456-7890 - (123) 555-7891 <br>
+                                <i class="icon-envelope-alt"></i> email@domainname.com
+                            </p>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+           
+        </footer>
+    </div>
+    <a href="#" class="scrollup"><i class="icon-angle-up icon-square icon-bglight icon-2x active"></i></a>
+
+    <!-- javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+
+    <script src="{% static 'js/modernizr.custom.js' %}"></script>
+    <script src="{% static 'js/toucheffects.js' %}"></script>
+    <script src="{% static 'js/google-code-prettify/prettify.js' %}"></script>
+    <script src="{% static 'js/jquery.bxslider.min.js' %}"></script>
+    <script src="{% static 'js/camera/camera.js' %}"></script>
+    <script src="{% static 'js/camera/setting.js' %}"></script>
+
+    <script src="{% static 'js/jquery.prettyPhoto.js' %}"></script>
+    <script src="{% static 'js/portfolio/jquery.quicksand.js' %}"></script>
+    <script src="{% static 'js/portfolio/setting.js' %}"></script>
+
+    <script src="{% static 'js/jquery.flexslider.js' %}"></script>
+    <script src="{% static 'js/animate.js' %}"></script>
+    <script src="{% static 'js/inview.js' %}"></script>
+
+    <!-- Template Custom JavaScript File -->
+    <script src="{% static 'js/custom.js' %}"></script>
+
+    </body>
+
+</html>

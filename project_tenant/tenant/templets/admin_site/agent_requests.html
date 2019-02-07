@@ -1,0 +1,65 @@
+{% extends 'admin_site/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    Agent List
+{% endblock %}
+{% block bodyblock %}
+test print
+<div  align="center">
+    <div style="background-image: url('images/bg-01.jpg');">
+        <div >
+
+            {% if agents %}
+                <table border="1">
+                    <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th colspan="2">Address</th>
+                    <th>Date of Request</th>
+                    <th>Profile</th>
+                    <th>Accept</th>
+                    <th>Reject</th>
+                    <th>View</th>
+                    </tr>
+
+                    {% for agent in agents %}
+                        <tr>
+                            <td>{{ agent.first_name }} {{ agent.lsat_name }}</td> 
+                            <td>{{ agent.ag_contact }}</td>
+                            <td>{{ agent.email }}</td>
+                            <td colspan="2">{{ agent.ag_local_address }}</td>
+                            <td>{{ agent.date_joined }}</td>
+                            <td> <img src="{{ STATIC_URL }}{{ agent.ag_profile_image }}" alt="{{ agent.username }}"></td>
+                            <td>
+                                <form method="POST" action="{% url 'agent_request_accept' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ agent.id }}">
+                                    <input type="submit" name="submit" value="Accept">
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST" action="{% url 'agent_request_reject' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ agent.id }}">
+                                    <input type="submit" name="submit" value="Reject">
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST" action="{% url 'agent_profile' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ agent.id }}">
+                                    <input type="submit" name="submit" value="View">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    
+                </table>
+            {% else %}
+                <strong>No new Requests.</strong>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
