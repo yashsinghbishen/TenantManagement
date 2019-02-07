@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from tenant.models import TblAgent
 from tenant.decorators import for_admin
+
 # Create your views here.
 
 
