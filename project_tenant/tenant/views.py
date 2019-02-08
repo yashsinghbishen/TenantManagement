@@ -15,9 +15,8 @@ def index(request):
             logout(request)
     return render(request, 'base.html')
 
+
 # custom login for admin/agent
-
-
 def do_login(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -60,16 +59,13 @@ def agent_request_accept(request):
     id = request.POST['id']
     agent = TblAgent.objects.get(id=id)
     agent.verified_save()
-    print("\n\n\n\n\n", agent)
     return view_agent_request(request)
 
 # deleting the agent request
 @for_admin
 def agent_request_reject(request):
     id = request.POST['id']
-    agent = TblAgent.objects.filter(id=id).delete()
-    # agent.verified_save()
-    print("\n\n\n\n\n", agent)
+    TblAgent.objects.filter(id=id).delete()
     return view_agent_request(request)
 
 
@@ -78,6 +74,4 @@ def agent_request_reject(request):
 def agent_profile(request):
     id = request.POST['id']
     agent = TblAgent.objects.get(id=id)
-    # agent.verified_save()
-    print("\n\n\n\n\n", agent)
     return render(request, 'admin_site/agent_profile.html', {'agent': agent})

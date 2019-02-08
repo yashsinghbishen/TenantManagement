@@ -1,0 +1,65 @@
+{% extends 'TM_template/Base.html' %}
+{% load staticfiles %}
+
+        {% block titleblock %}
+       Log In
+        {% endblock %}
+      
+{% block bodyblock %}
+
+	<div  align="center">
+		<div style="background-image: url('images/bg-01.jpg');">
+			<div >
+				<form  method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+					<h2 class="title"><strong>Login</strong></h2>
+
+					<div data-validate = "Username is reauired">
+						<span >Username</span>
+						<input  type="text" name="username" placeholder="Type your username">
+						<span  data-symbol="&#xf206;"></span>
+					</div>
+
+					<div  data-validate="Password is required">
+						<span >Password</span>
+						<input type="password" name="password" placeholder="Type your password">
+						<span  data-symbol="&#xf190;"></span>
+					</div>
+					
+					<div >
+						<a href="#">
+							Forgot password?
+						</a>
+					</div>
+					
+					<div >
+						<div >
+							<div ></div>
+							<input type="submit" name="submit" value="Login" class="btn btn-theme btn-rounded animated fadeInUp">
+								
+						</div>
+					</div>
+
+
+                    <div >
+                            <a href="#">
+                                Register new Agent
+                            </a>
+                    </div>
+					
+                    <div >
+                            <a href="#">
+                                I am Tenant
+                            </a>
+                    </div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+
+{% endblock %}
+      
