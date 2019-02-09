@@ -87,13 +87,13 @@
 
 					<div data-validate = "Username is reauired">
 						<span >Username</span>
-						<input  type="text" name="username" placeholder="Type your username">
+						<input  type="text" name="username" placeholder="Type your username" required>
 						<span  data-symbol="&#xf206;"></span>
 					</div>
 
 					<div  data-validate="Password is required">
 						<span >Password</span>
-						<input type="password" name="password" placeholder="Type your password">
+                        <input type="password" name="password" placeholder="Type your password" required>
 						<span  data-symbol="&#xf190;"></span>
 					</div>
 					
@@ -113,7 +113,7 @@
 
 
                     <div >
-                            <a href="#">
+                            <a href="{% url 'agent_registration' %}">
                                 Register new Agent
                             </a>
                     </div>

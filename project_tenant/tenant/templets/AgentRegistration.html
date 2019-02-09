@@ -1,4 +1,4 @@
-{% extends 'TM_template/Base.html' %}
+{% extends 'tenant/Base.html' %}
 {% load staticfiles %}
 {% block titleblock %}
 Register
@@ -30,45 +30,45 @@ Register
       <div class="span8">
         <form action="" method="post" enctype="multipart/form-data" role="form" class="contactForm">
           {% csrf_token %}
-          {{ag_form.first_name.help_text}}
-          {{ag_form.first_name}}
+          {{form.first_name.help_text}}
+          {{form.first_name}}
           <br /><br />
 
-          {{ag_form.last_name.help_text}}
-          {{ag_form.last_name}}
+          {{form.last_name.help_text}}
+          {{form.last_name}}
           <br /><br />
 
-          {{ag_form.username.help_text}}
-          {{ag_form.username}}
+          {{form.username.help_text}}
+          {{form.username}}
           <br /><br />
 
-          {{ag_form.email.help_text}}
-          {{ag_form.email}}
+          {{form.email.help_text}}
+          {{form.email}}
           <br /><br />
 
-          {{ag_form.password.help_text}}
-          {{ag_form.password}}
+          {{form.password.help_text}}
+          {{form.password}}
           <br /><br />
 
-          {{ag_form.password2.help_text}}
-          {{ag_form.password2}}
+          {{form.password2.help_text}}
+          {{form.password2}}
           <div id="passlbl" style="color: orangered"></div>
           <br /><br />
 
-          {{ag_form.ag_contact.help_text}}
-          {{ag_form.ag_contact}}
+          {{form.ag_contact.help_text}}
+          {{form.ag_contact}}
           <br /><br />
 
-          {{ag_form.ag_profile_image.help_text}}
-          {{ag_form.ag_profile_image}}
+          {{form.ag_profile_image.help_text}}
+          {{form.ag_profile_image}}
           <br /><br />
 
-          {{ag_form.ag_local_address.help_text}}
-          {{ag_form.ag_local_address}}
+          {{form.ag_local_address.help_text}}
+          {{form.ag_local_address}}
           <br /><br />
 
-          {{ag_form.ag_permanent_address.help_text}}
-          {{ag_form.ag_permanent_address}}
+          {{form.ag_permanent_address.help_text}}
+          {{form.ag_permanent_address}}
           <br /><br />
 
           Joining Date:

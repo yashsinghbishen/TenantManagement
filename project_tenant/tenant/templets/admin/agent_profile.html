@@ -1,0 +1,87 @@
+{% extends 'admin/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    Agent List
+{% endblock %}
+
+{% block bodyblock %}
+<section id="inner-headline">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="inner-heading">
+                    <ul class="breadcrumb">
+                        <li><a href="{% url 'admin_index' %}">Home</a> <i class="icon-angle-right"></i></li>
+                        <li><a href="{% url 'admin_agent_requests' %}">Agent Requests</a> <i class="icon-angle-right"></i></li>
+                        <li class="active">Agent Request details</li>
+                    </ul>
+                    <h2>Agent Request details</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="container">
+    <div class="container">
+        <div class="row">
+            <div class="span8">
+                <div style="background-image: url('images/bg-01.jpg');">
+                    <div class="box flyIn animated fadeInUp">
+                        <center>
+                            {% if agent %}
+                            <table style="border-spacing:125px;">
+                                <tr style="padding:20px;">
+                                   
+                                    <td colspan="2" style="padding:20px;"> <img height="250" width="250" src="{{ MEDIA_URL }}{{ agent.ag_profile_image }}"
+                                            alt="no image of {{ agent.username }}"></td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Name:</b></td>
+                                    <td style="padding:20px;">{{ agent.first_name }}</td>
+                                    <td style="padding:20px;"> {{ agent.lsat_name }}</td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Contact:</b></td>
+                                    <td style="padding:20px;">{{ agent.ag_contact }}</td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Email:</b></td>
+                                    <td style="padding:20px;">{{ agent.email }}</td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Local Address:</b></td>
+                                    <td style="padding:20px;">{{ agent.ag_local_address }}</td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Joinning Date:</b></td>
+                                    <td style="padding:20px;">{{ agent.date_joined }}</td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;">
+                                        <form method="POST" action="{% url 'admin_agent_request_accept' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ agent.id }}">
+                                            <input type="submit" name="submit" class="btn btn-success" value="Accept">
+                                        </form>
+                                    </td>
+                                    <td style="padding:20px;">
+                                        <form method="POST" action="{% url 'admin_agent_request_reject' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ agent.id }}">
+                                            <input type="submit" name="submit" class="btn btn-danger" value="Reject">
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            {% else %}
+                            <strong>Profile not found .</strong>
+                            {% endif %}
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

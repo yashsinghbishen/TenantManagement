@@ -65,14 +65,14 @@ class AgentForm(ModelForm):
     ag_profile_image=forms.ImageField(help_text='Upload Profile Picture here:', max_length=200, required=False)
 
 
-class AgentCreationForm(UserCreationForm):
+# class AgentCreationForm(UserCreationForm):
 
-    class Meta(UserCreationForm):
-        model = TblAgent
-        fields = ('username', 'email',)
+#     class Meta(UserCreationForm):
+#         model = TblAgent
+#         fields = ('username', 'email',)
 
-class AgentChangeForm(UserChangeForm):
+# class AgentChangeForm(UserChangeForm):
 
-    class Meta:
-        model = TblAgent
-        fields = ('username', 'email')
+#     class Meta:
+#         model = TblAgent
+#         fields = ('username', 'email')

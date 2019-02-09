@@ -32,12 +32,12 @@ class TblAgent(AbstractUser):
                                          blank=True)
 
     # Overriding save method to save dafault user
-    # def save(self, *args, **kwargs):
-    #     self.is_active = False
-    #     self.is_staff = False
-    #     # self.set_password (AbstractUser.password)
-    #     # self.is_superuser = False
-    #     super(TblAgent, self).save(*args, **kwargs)
+    def agent_save(self, *args, **kwargs):
+        self.is_active = False
+        self.is_staff = False
+        # self.set_password (AbstractUser.password)
+        self.is_superuser = False
+        super(TblAgent, self).save(*args, **kwargs)
 
     def verified_save(self, *args, **kwargs):
         self.is_active = True
@@ -45,8 +45,7 @@ class TblAgent(AbstractUser):
         # self.is_superuser = False
         super(TblAgent, self).save(*args, **kwargs)
 
-    def normal_save(self, *args, **kwargs):
-        super(TblAgent, self).save(*args, **kwargs)
+    
 
     class Meta:
         verbose_name_plural = 'Agent Details'

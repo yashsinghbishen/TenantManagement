@@ -1,0 +1,43 @@
+<tr>
+<th>Name</th>
+<th>Contact</th>
+<th>Email</th>
+<th colspan="2">Address</th>
+<th>Date of Request</th>
+<th>Profile</th>
+<th>Accept</th>
+<th>Reject</th>
+<th>View</th>
+</tr>
+
+{% for agent in agents %}
+    <tr>
+        <td>{{ agent.first_name }} {{ agent.last_name }}</td> 
+        <td>{{ agent.ag_contact }}</td>
+        <td>{{ agent.email }}</td>
+        <td colspan="2">{{ agent.ag_local_address }}</td>
+        <td>{{ agent.date_joined }}</td>
+        <td> <img height="100px" width="100px" src="{{ MEDIA_URL }}{{ agent.ag_profile_image }}" alt="Iamge of {{ agent.username }}"></td>
+        <td>
+            <form method="POST" action="{% url 'admin_agent_request_accept' %}">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ agent.id }}">
+                <input type="submit" name="submit" class="btn-success btn-rounded" value="Accept">
+            </form>
+        </td>
+        <td>
+            <form method="POST" action="{% url 'admin_agent_request_reject' %}">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ agent.id }}">
+                <input type="submit" name="submit" class="btn-danger btn-rounded" value="Reject">
+            </form>
+        </td>
+        <td>
+            <form method="POST" action="{% url 'admin_agent_profile' %}">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ agent.id }}">
+                <input type="submit" name="submit" class="btn-info btn-rounded" value="View">
+            </form>
+        </td>
+    </tr>
+{% endfor %}

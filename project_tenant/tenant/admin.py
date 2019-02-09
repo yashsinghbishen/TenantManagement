@@ -13,8 +13,7 @@ class UserCreateForm(UserCreationForm):
 
 class UserAdmin1(UserAdmin):
     add_form = UserCreateForm
-    # prepopulated_fields = {'username': ('first_name' , 'last_name', 'ag_contact' )}
-
+   
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
