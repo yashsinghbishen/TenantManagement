@@ -45,8 +45,6 @@ class TblAgent(AbstractUser):
         # self.is_superuser = False
         super(TblAgent, self).save(*args, **kwargs)
 
-    
-
     class Meta:
         verbose_name_plural = 'Agent Details'
 
@@ -107,6 +105,14 @@ class TblMasterProperty(models.Model):
     msp_is_allocated = models.BooleanField(default=False)
     msp_is_active = models.BooleanField(default=True)
 
+    #A function to Create new Save
+    def new_save(self, *args, **kwargs):
+        clone = TblMasterPropertyClone.objects.create(
+            cln_alias=self.msp_name+" master clone",
+            cln_master=self,
+            cln_is_master_clone=True)
+        clone.save()
+        super(TblMasterProperty, self).save(*args, **kwargs)
     class Meta:
         verbose_name_plural = 'Master Properties'
 
@@ -114,10 +120,20 @@ class TblMasterProperty(models.Model):
         return self.msp_address
 
 
+# Creating master property clone for multiple Allocation
+class TblMasterPropertyClone(models.Model):
+    # Alias Name for the Clone property
+    cln_alias = models.CharField(max_length=30,)
+    # Master property Reference
+    cln_master = models.ForeignKey(TblMasterProperty, on_delete=models.CASCADE)
+    # Check for Master Clone
+    cln_is_master_clone = models.BooleanField(default=False)
+
+
 # Property Table
 class TblProperty(models.Model):
-    # Master property reference
-    pr_master = models.ForeignKey(TblMasterProperty,
+    # Master property Clone reference
+    pr_master = models.ForeignKey(TblMasterPropertyClone,
                                   on_delete=models.CASCADE)
     # Address of property
     pr_address = models.CharField(max_length=255)
@@ -125,6 +141,8 @@ class TblProperty(models.Model):
     pr_rent = models.DecimalField(decimal_places=2, max_digits=10)
     # Fixed safety deposite for property
     pr_deposite = models.DecimalField(decimal_places=2, max_digits=10)
+    #Description for Property
+    pr_description = models.CharField(max_length=255,null=True)
     # allocation status of property
     pr_is_allocated = models.BooleanField(default=False)
     pr_is_active = models.BooleanField(default=True)
@@ -163,7 +181,7 @@ class TblAgentAllocation(models.Model):
     al_agent = models.ForeignKey(TblAgent,
                                  on_delete=models.CASCADE)
     # Master property reference
-    al_master = models.ForeignKey(TblMasterProperty,
+    al_master = models.ForeignKey(TblMasterPropertyClone,
                                   on_delete=models.CASCADE)
 
     class Meta:
@@ -224,3 +242,16 @@ class TblPropertyAllocation(models.Model):
 
     def __str__(self):
         return self.pa_property.pr_address
+
+
+
+# msp_name yash
+# msp_address singh
+# msp_description bishen
+# msp_have_clones on
+# msp_clone_no 5
+# msp_clone1 12
+# msp_clone2 23
+# msp_clone3 34
+# msp_clone4 45
+# msp_clone5 56

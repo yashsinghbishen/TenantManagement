@@ -1,0 +1,99 @@
+{% extends 'admin/base.html' %}
+{% load staticfiles %}
+{% block titleblock %}
+Agent List
+{% endblock %}
+{% block bodyblock %}
+<section id="inner-headline">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="inner-heading">
+                    <ul class="breadcrumb">
+                        <li><a href="{% url 'adminhome' %}"><i class="icon-home"></i> Home</a> <i class="icon-angle-right"></i></li>
+                        <li class="active">Master Property</li>
+                    </ul>
+                    <h2>Master Property</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="container">
+    <div class="container">
+        <div class="row">
+            <div class="span10">
+
+                <div style="background-image: url('images/bg-01.jpg');">
+                    <div>
+
+                        {% if master_property_list %}
+                        <table class="table">
+                            <tr class="success">
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Detail</th>
+                                <th>Allocate</th>
+                                <th>Sold Out</th>
+                            </tr>
+
+                            {% for property in master_property_list %}
+                            {% for mp in allocated_mp %}
+                            {% if property.id != allocated_mp.al_master_id %}
+                            <tr class="info">
+                                <td>{{ property.msp_name}} </td>
+                                <td>{{ property.msp_address }}</td>
+                                <td>{{ property.msp_description }}</td>
+                                <td>    <form method="GET" action="{% url 'allocate_msp' property.id %}">
+                                        {% csrf_token %}
+                                       
+                                        <input type="submit" class="btn btn-success" name="submit" value="Allocate Agent">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="POST" action="{% url 'master_property_soldout' property.id %}">
+                                        {% csrf_token %}
+                                        {% if property.msp_is_active == True %}
+                                        <input type="submit" name="submit" class="btn btn-theme" value="Sold Out">
+                                        {% endif %}
+                                    </form>
+                                </td>
+                            
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            
+                        </table>
+                        <div class="pagination">
+                                <ul class="pagination">
+                                    {% if master_property_list.has_previous %}
+                                    <li class="active"><a href="?page={{ master_property_list.previous_page_number }}">Prev</a></li>
+                                    {% else %}
+                                    <li class="disabled"><a href="">Prev</a></li>
+                                    {% endif %}
+                                    {% for i in master_property_list.paginator.page_range %}
+                                    {% if master_property_list.number == i %}
+                                    <li class="active"><a href="">{{ i }} </a></li>
+                                    {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if master_property_list.has_next %}
+                                    <li><a href="?page={{ master_property_list.next_page_number }}">Next</a></li>
+                                    {% else %}
+                                    <li class="disabled"><span>Next</span></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% else %}
+                        <strong>No new Requests.</strong>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

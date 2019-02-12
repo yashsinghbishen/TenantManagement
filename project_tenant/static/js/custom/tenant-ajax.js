@@ -31,3 +31,45 @@ $('#search').keyup(function () {
 });
 
 
+$("#create_clone").change(function () {
+    if($(this).attr("checked"))
+    {
+        $("#clone_div").removeClass("hidden");
+    }
+    else
+    {
+        $("#clone_div").addClass('hidden');
+    }
+    
+});
+
+$('#clone_no').keyup(function () {  
+    var no = $(this).val();
+    if(Number(no)>50)
+    {
+        $('#clone_list').html("<strong> Can not create more than 50 clones</strong>");
+    }
+    else
+    {
+        $.get('/admin/master_clone_list/', { clone_no: no}, function (data) {
+            $('#clone_list').html(data);
+        });
+    }
+});
+
+
+
+$("#msp_list").change(function () {
+    if($(this).val()=="Select item")
+    {
+        $("#property").addClass('hidden');
+    }
+    else
+    {   
+        $("#property").removeClass("hidden");
+        $.get('/admin/property_clone_list/', { msp: $(this).val()}, function (data) {
+            $('#property').html(data);
+        });
+    }
+    
+});

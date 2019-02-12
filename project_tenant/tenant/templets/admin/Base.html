@@ -83,6 +83,24 @@
                                             </ul>
                                         </li>
                                         <li class="dropdown">
+                                            <a href="#">Property <i class="icon-angle-down"></i></a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown"><a >Master Property<i class="icon-angle-right"> </i></a>
+                                                    <ul class="dropdown-menu sub-menu-level1">
+                                                            <li><a href="{% url 'admin_add_master_property' %}">Add Master Property</a></li>
+                                                            {% comment %} <li><a href="{% url 'master_property_view' %}">View Master Properties</a></li> {% endcomment %}
+                                                        </ul>
+                                                </li>
+                                                <li class="dropdown"><a >Property<i class="icon-angle-right"></i></a>
+                                                    <ul class="dropdown-menu sub-menu-level1">
+                                                            <li><a href="{% url 'admin_add_property' %}">Add Property</a></li>
+                                                            {% comment %} <li><a href="{% url 'property_listview' %}">View Properties</a></li> {% endcomment %}
+                                                        </ul>
+                                                    </li>
+                                                
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown">
                                             <a href="#">Features <i class="icon-angle-down"></i></a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">Typography</a></li>

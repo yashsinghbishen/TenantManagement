@@ -11,4 +11,8 @@ urlpatterns = [
     path('agent_requests/agent_profile/',views.agent_profile, name='admin_agent_profile'),
     path('agent_action/',views.agent_action, name='admin_agent_action'),
     path('agent_request_search/',views.agent_requests_search, name='admin_agent_requests_search'),
+    path('add_master_property/',views.add_master_property,name='admin_add_master_property'),
+    path('master_clone_list/',views.create_clone_list,name='admin_create_clone_list'),
+    path('add_property/',views.add_property,name='admin_add_property'),
+    path('property_clone_list/',views.clone_list,name='admin_show_clone_list'),
 ]

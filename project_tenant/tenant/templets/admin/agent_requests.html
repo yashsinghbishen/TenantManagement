@@ -24,13 +24,17 @@
                 <div class="row">
                     <div class="span10">
         
-                        <div style="background-image: url('images/bg-01.jpg');">
-                            <div >
+                        <div style="background-image: url('images/bg-01.jpg');" >
+                            {% if agents %}
+                            <input placeholder="Enter agent name to search" class="span10" id="search" type="text">
+                            {% endif %}
+                            <div id="tbl_agents">
                                
-                                    <input placeholder="Enter agent name to search" class="span10" id="search" type="text">
-                                
+                                    
                                 {% if agents %}
-                                    <table class="table" id="tbl_agents">
+                                    
+                                
+                                    <table class="table" >
                                         <tr>
                                         <th>Name</th>
                                         <th>Contact</th>

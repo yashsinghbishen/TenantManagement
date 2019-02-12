@@ -1,0 +1,60 @@
+{% extends 'admin/base.html' %}
+{% load staticfiles%}
+{% block titleblock %}Add Property
+{% endblock %}
+{% block bodyblock %}
+<section id="inner-headline">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="inner-heading">
+                    <ul class="breadcrumb">
+                        <li><a href="{% url 'admin_index' %}"><i class="icon-home"></i> Home</a> <i class="icon-angle-right"></i></li>
+                        <li class="active">Add Property</li>
+                    </ul>
+                    <h2>Add Property</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="container">
+    <div class="container">
+        <div class="row">
+            <div class="span10">
+
+                <div style="background-image: url('images/bg-01.jpg');">
+                    <div>
+                        <form enctype="multipart/form-data" role="form"  action="" method="POST"
+                            id="AddMPForm">
+                            {% csrf_token %}
+                            Select Property:
+                            <select name="msp" class="form-data" id="msp_list" placeholder="new hint">
+                                <option >Select item</option>
+                                {% for item in address_list %}
+                                <option  value={{item.id}}> {{item.msp_name}} {{item.msp_address}}</option>
+                                {% endfor %}
+                            </select><br />
+                            <div id="property" class="hidden">
+                               
+                            </div>
+                            
+                            Address:
+                            <input type="text" name="paddress"/><a  class="icon-plus-sign"></a>
+                            <br />
+                            Rent:
+                            <input type="text" name="prent" /><br />
+                            Deposite:
+                            <input type="text" name="pdeposite" /><br />
+                            Description:
+                            <textarea name="msp_description" required="True"></textarea><br/>
+
+                            <button type="submit" class='btn btn-success'>Add Property</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
