@@ -25,32 +25,48 @@
 
                 <div style="background-image: url('images/bg-01.jpg');">
                     <div>
-                        <form enctype="multipart/form-data" role="form"  action="" method="POST"
-                            id="AddMPForm">
+                        <form enctype="multipart/form-data" role="form" class="contactForm" action="" method="POST"
+                            id="AddMPForm" onsubmit="return validateForm()">
                             {% csrf_token %}
                             Select Property:
-                            <select name="msp" class="form-data" id="msp_list" placeholder="new hint">
+                            <select name="msp" class="form-data" id="msp_list" placeholder="new hint" required>
                                 <option >Select item</option>
                                 {% for item in address_list %}
                                 <option  value={{item.id}}> {{item.msp_name}} {{item.msp_address}}</option>
                                 {% endfor %}
                             </select><br />
+                            
                             <div id="property" class="hidden">
                                
                             </div>
                             
+                            <input name="num" id="num" type="hidden" value="1"/>
                             Address:
-                            <input type="text" name="paddress"/><a  class="icon-plus-sign"></a>
+                            <input type="text" name="prp_address0"/>
+                            <div id="addresses">
+                            
+                            </div>
+                            <a id="add_address"  class="icon-plus-sign"></a>
+                            
                             <br />
                             Rent:
-                            <input type="text" name="prent" /><br />
+                            <input type="number" min="0.00" step=".01"  name="prp_rent" /><br />
                             Deposite:
-                            <input type="text" name="pdeposite" /><br />
+                            <input type="number" min="0.00" step=".01" name="prp_deposite" /><br />
                             Description:
-                            <textarea name="msp_description" required="True"></textarea><br/>
+                            <textarea name="prp__description" required="True"></textarea><br/>
 
-                            <button type="submit" class='btn btn-success'>Add Property</button>
+                            <button type="submit" id="btn_submit" class='btn btn-success'>Add Property</button>
                         </form>
+                        <script>
+                            function validateForm() {
+                                if($("#msp_list").val()=="Select item")
+                                {
+                                    $("#msp_list").attr("data","aaya mai");
+                                    return false;
+                                }
+                            }
+                        </script>
                     </div>
                 </div>
             </div>

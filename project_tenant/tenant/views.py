@@ -251,27 +251,27 @@ def clone_list(request):
 
 # Adding new property in the database
 def add_property(request):
-    address_list = []
-    if request.method == "POST":
-        pr_master = TblProperty.objects.get(id=request.POST['msp'])
-        pr_address = request.POST['paddress']
-        pr_rent = request.POST['prent']
-        pr_deposite = request.POST['pdeposite']
-        pr_is_allocated = False
-        pr_is_active = True
-        try:
-            obj = TblProperty.objects.create(pr_master=pr_master,
-                                             pr_address=pr_address,
-                                             pr_rent=pr_rent,
-                                             pr_deposite=pr_deposite,
-                                             pr_is_active=pr_is_active,
-                                             pr_is_allocated=pr_is_allocated)
-            obj.save()
-            return admin_index(request)
-        except Exception as e:
-            print("Error:", e)
-    else:
-        address_list = TblMasterProperty.objects.all()
+    # address_list = []
+    # if request.method == "POST":
+    #     pr_master = TblProperty.objects.get(id=request.POST['msp'])
+    #     pr_address = request.POST['paddress']
+    #     pr_rent = request.POST['prent']
+    #     pr_deposite = request.POST['pdeposite']
+    #     pr_is_allocated = False
+    #     pr_is_active = True
+    #     try:
+    #         obj = TblProperty.objects.create(pr_master=pr_master,
+    #                                          pr_address=pr_address,
+    #                                          pr_rent=pr_rent,
+    #                                          pr_deposite=pr_deposite,
+    #                                          pr_is_active=pr_is_active,
+    #                                          pr_is_allocated=pr_is_allocated)
+    #         obj.save()
+    #         return admin_index(request)
+    #     except Exception as e:
+    #         print("Error:", e)
+    # else:
+    address_list = TblMasterProperty.objects.all()
     return render(request, 'admin/add_property.html', {'address_list': address_list})
 
 

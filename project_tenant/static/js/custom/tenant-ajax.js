@@ -1,3 +1,4 @@
+// Function to handle the agents status on the click of agent-act button.
 $('.agent-act').click(function () {
     var ag_id;
     var act;
@@ -21,7 +22,7 @@ $('.agent-act').click(function () {
     }
 });
 
-
+// Searching in Agent request on search textbox
 $('#search').keyup(function () {
     var query;
     query = $(this).val();
@@ -30,7 +31,8 @@ $('#search').keyup(function () {
     });
 });
 
-
+// Enabling User to create clone 
+// Showing user clone_div area to create clone
 $("#create_clone").change(function () {
     if($(this).attr("checked"))
     {
@@ -43,6 +45,7 @@ $("#create_clone").change(function () {
     
 });
 
+// Creating the list of clones.
 $('#clone_no').keyup(function () {  
     var no = $(this).val();
     if(Number(no)>50)
@@ -58,7 +61,7 @@ $('#clone_no').keyup(function () {
 });
 
 
-
+// Showing Admin clone list while allocating Agent to Property.
 $("#msp_list").change(function () {
     if($(this).val()=="Select item")
     {
@@ -73,3 +76,32 @@ $("#msp_list").change(function () {
     }
     
 });
+
+
+
+
+// Showing more textboxes when user clicks plus button
+$("#add_address").click(function () {
+    var num = $("#num").val();
+    var new_html = '<input type="text" name="prp_address'+num+'"/><a class="icon-minus-sign remove_address" ></a>';
+    var new_num = Number(num)+1;
+    $("#num").val(new_num);
+    $("#addresses").append(new_html);
+    $("#addresses").find('input').last().focus();
+});
+
+// Removing the textbox on click of minus button
+$(".remove_address").live("click", function(){
+    $(this).prev('input').remove();
+    $(this).remove();
+    
+});
+
+
+
+// function mycall() 
+// {
+//    alert("aaya");
+//    var num = $(this).attr("data-num");
+//     $(this).prev('input').remove();
+// }

@@ -255,3 +255,19 @@ class TblPropertyAllocation(models.Model):
 # msp_clone3 34
 # msp_clone4 45
 # msp_clone5 56
+
+
+# msp     30
+# prp_address0     1
+# prp_address7     8
+# prp_address9     10
+# prp_rent     20.12
+# prp_deposite     200
+# prp__description     dekha
+
+
+
+    # if request.method == "POST":
+    #     lst = request.POST
+    #     for l in lst.keys():
+    #         print(l,"   ",lst[l])
