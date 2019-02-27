@@ -37,8 +37,7 @@
                                 </tr>
                                 <tr style="padding:20px;">
                                     <td style="padding:20px;"><b>Name:</b></td>
-                                    <td style="padding:20px;">{{ agent.first_name }}</td>
-                                    <td style="padding:20px;"> {{ agent.last_name }}</td>
+                                    <td style="padding:20px;">{{ agent.first_name }} {{ agent.last_name }}</td>
                                 </tr>
                                 <tr style="padding:20px;">
                                     <td style="padding:20px;"><b>Contact:</b></td>
@@ -56,23 +55,45 @@
                                     <td style="padding:20px;"><b>Joinning Date:</b></td>
                                     <td style="padding:20px;">{{ agent.date_joined }}</td>
                                 </tr>
-                                <tr style="padding:20px;">
-                                    <td style="padding:20px;">
-                                        <form method="POST" action="{% url 'admin_agent_request_accept' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="id" value="{{ agent.id }}">
-                                            <input type="submit" name="submit" class="btn btn-success" value="Accept">
-                                        </form>
-                                    </td>
-                                    <td style="padding:20px;">
-                                        <form method="POST" action="{% url 'admin_agent_request_reject' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="id" value="{{ agent.id }}">
-                                            <input type="submit" name="submit" class="btn btn-danger" value="Reject">
-                                        </form>
-                                    </td>
+                                {% if  not agent.is_active  and not agent.is_staff  %}
+                                    <tr style="padding:20px;">
+                                        <td style="padding:20px;">
+                                            <form method="POST" action="{% url 'admin_agent_request_accept' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="id" value="{{ agent.id }}">
+                                                <input type="submit" name="submit" class="btn btn-success" value="Accept">
+                                            </form>
+                                        </td>
+                                        <td style="padding:20px;">
+                                            <form method="POST" action="{% url 'admin_agent_request_reject' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="id" value="{{ agent.id }}">
+                                                <input type="submit" name="submit" class="btn btn-danger" value="Reject">
+                                            </form>
+                                        </td>
 
-                                </tr>
+                                    </tr>
+                                {% elif not agent.is_superuser  and agent.is_staff %}
+                                    {% if agent.is_active %} 
+                                        <tr style="padding:20px;">
+                                            <td style="padding:20px;"><b>Status:</b></td>
+                                            <td style="padding:20px;" id="td{{agent.id}}">Active</td>
+                                        </tr>
+                                        <tr>
+                                            {% comment %} <td id="td{{agent.id}}">Active</td> {% endcomment %}
+                                            <td colspan='2' align="center"><input type="button" class="agent-act btn-danger btn-rounded" data-id="{{ agent.id }}" data-act="0" value="Retire"></td> 
+                                        </tr>
+                                    {% else %} 
+                                        <tr style="padding:20px;">
+                                            <td style="padding:20px;"><b>Status:</b></td>
+                                            <td style="padding:20px;" id="td{{agent.id}}">Retired</td>
+                                        </tr>
+                                        <tr>
+                                            {% comment %} <td id="td{{agent.id}}" >Retired</td> {% endcomment %}
+                                            <td colspan='2' align="center"><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" value="Activate"></td>
+                                        </tr>
+                                    {% endif %}
+                                {% endif %}
                             </table>
                             {% else %}
                             <strong>Profile not found .</strong>

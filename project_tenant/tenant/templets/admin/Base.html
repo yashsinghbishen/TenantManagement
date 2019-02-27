@@ -22,6 +22,7 @@
     <link href="{% static "css/camera.css" %}" rel="stylesheet" />
     <link href="{% static "css/jquery.bxslider.css" %}" rel="stylesheet" />
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <!-- <link href="../../static/css/style.css" rel="stylesheet" /> -->
     <!-- Theme skin -->
     <link href="{% static 'color/default.css' %}" rel="stylesheet" />
@@ -32,6 +33,66 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png" />
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png" />
     <link rel="shortcut icon" href="ico/favicon.png" />
+
+    <style>
+        .fixed_header tbody {
+            display: block;
+            max-height: 200px;
+            overflow-y: scroll;
+            border-collapse: collapse;
+
+        }
+
+        .fixed_header thead,
+            tbody tr {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        } 
+        .fixed_header td{
+            word-wrap:break-word;
+        }
+
+         /* The Modal (background) */
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 15% 50%; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+        } 
+
+</style>
 
    
 </head>
@@ -88,7 +149,7 @@
                                                 <li class="dropdown"><a >Master Property<i class="icon-angle-right"> </i></a>
                                                     <ul class="dropdown-menu sub-menu-level1">
                                                             <li><a href="{% url 'admin_add_master_property' %}">Add Master Property</a></li>
-                                                            {% comment %} <li><a href="{% url 'master_property_view' %}">View Master Properties</a></li> {% endcomment %}
+                                                            <li><a href="{% url 'admin_view_master_property' %}">View Master Properties</a></li>
                                                         </ul>
                                                 </li>
                                                 <li class="dropdown"><a >Property<i class="icon-angle-right"></i></a>
@@ -100,19 +161,15 @@
                                                 
                                             </ul>
                                         </li>
+                                        <li>
+                                            <a href="{% url 'admin_allocate_clone' %}">Allocate Agent </a>
+                                        </li>
                                         <li class="dropdown">
-                                            <a href="#">Features <i class="icon-angle-down"></i></a>
+                                            <a href="#">Clones <i class="icon-angle-down"></i></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="#">Typography</a></li>
-                                                <li><a href="#">Components</a></li>
-                                                <li><a href="#">Icons</a></li>
-                                                <li><a href="#">Icon variations</a></li>
-                                                <li class="dropdown"><a href="#">3rd menus<i class="icon-angle-right"></i></a>
-                                                    <ul class="dropdown-menu sub-menu-level1">
-                                                        <li><a href="#">Sub menu</a></li>
-                                                        <li><a href="#">Sub menu</a></li>
-                                                    </ul>
-                                                </li>
+                                                <li><a href="{% url 'admin_create_clone' %}">Create Clones</a></li>
+                                                <li><a href="{% url 'admin_manage_clones' %}">Manage Clones</a></li>
+                                                <li><a href="#">Delete Clones</a></li>
                                             </ul>
                                         </li>
                                         <li class="dropdown">
@@ -237,6 +294,7 @@
     <script src="{% static 'js/jquery.flexslider.js' %}"></script>
     <script src="{% static 'js/animate.js' %}"></script>
     <script src="{% static 'js/inview.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
     <!-- Template Custom JavaScript File -->
     <script src="{% static 'js/custom.js' %}"></script>

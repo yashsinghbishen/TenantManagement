@@ -1,6 +1,6 @@
 {% if clones %}
     Select Property:
-    <select name="msp" class="form-data" id="msp_list" placeholder="new hint">
+    <select name="pr_msp_clone" class="form-data" id="cln_list" placeholder="new hint">
         {% for clone in clones %}
             <option  value={{clone.id}}> {{clone.cln_alias}} </option>
         {% endfor %}

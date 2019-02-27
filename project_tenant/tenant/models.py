@@ -97,12 +97,11 @@ class TblMasterProperty(models.Model):
     # Name of property
     msp_name = models.CharField(max_length=30, default='My Property')
     # address of property
-    msp_address = models.CharField(null=False,
-                                   blank=False, max_length=255)
+    msp_address = models.CharField(max_length=255, default='My Property')
     # description of property
     msp_description = models.CharField(max_length=255, null=True)
     # Status of allocation of property
-    msp_is_allocated = models.BooleanField(default=False)
+    # msp_is_allocated = models.BooleanField(default=False)
     msp_is_active = models.BooleanField(default=True)
 
     #A function to Create new Save
@@ -128,6 +127,10 @@ class TblMasterPropertyClone(models.Model):
     cln_master = models.ForeignKey(TblMasterProperty, on_delete=models.CASCADE)
     # Check for Master Clone
     cln_is_master_clone = models.BooleanField(default=False)
+    # Status of allocation of property
+    cln_is_allocated = models.BooleanField(default=False)
+    cln_is_active = models.BooleanField(default=True)
+
 
 
 # Property Table
@@ -152,6 +155,27 @@ class TblProperty(models.Model):
 
     def __str__(self):
         return self.pr_address
+
+
+# View of master property
+class ViewMasterProperties(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    msp_name = models.CharField(max_length=30, default='My Property')
+    msp_address = models.CharField(max_length=255)
+    msp_description= models.CharField(max_length=255)
+    msp_is_active = models.BooleanField(default=True)
+    no_of_clones = models.BigIntegerField()
+    allocated_clones = models.BigIntegerField()
+    unallocated_clones = models.BigIntegerField()
+    no_of_property = models.BigIntegerField()
+    allocated_properties = models.BigIntegerField()
+    unallocated_properties = models.BigIntegerField()
+
+    class Meta:
+        db_table = 'view_master_properties'
+        managed = False
+        verbose_name = 'Master Property '
+        verbose_name_plural = 'Master Properties'
 
 
 # Visit Table
@@ -224,7 +248,7 @@ class TblPropertyAllocation(models.Model):
     # Starting date of agreement
     pa_agreement_date = models.DateField(null=False)
     # Ending date of Agreement
-    pa_agreement_and_date = models.DateField(null=False)
+    pa_agreement_end_date = models.DateField(null=False)
     # Copy of acceptance latter
     pa_acceptance_latter = models.ImageField(
         upload_to='rent/acceptance_latter')
@@ -256,14 +280,17 @@ class TblPropertyAllocation(models.Model):
 # msp_clone4 45
 # msp_clone5 56
 
-
-# msp     30
-# prp_address0     1
-# prp_address7     8
-# prp_address9     10
-# prp_rent     20.12
-# prp_deposite     200
-# prp__description     dekha
+# pr_msp     4
+# pr_msp_clone     29
+# pr_num     10
+# pr_address0     0
+# pr_address2     0
+# pr_address4     5
+# pr_address6     7
+# pr_address8     9
+# pr_rent     20.00
+# pr_deposite     200.0
+# pr__description     tyjr
 
 
 
@@ -271,3 +298,16 @@ class TblPropertyAllocation(models.Model):
     #     lst = request.POST
     #     for l in lst.keys():
     #         print(l,"   ",lst[l])
+
+# data = TblMasterPropertyClone.objects.all()\
+#                 .annotate(
+#                     properties=Count('tblproperty',
+#                         Subquery(
+#                             TblProperty.objects.filter(
+#                                 pr_master=OuterRef('pk')
+#                             ).values('pr_master')\
+#                         )
+#                     )
+#             ).order_by('-cln_is_master_clone','cln_alias')
+#             for d in data.values():
+#                 print(d.keys())

@@ -1,0 +1,61 @@
+{% extends 'TM_template/Admin/Base.html'%}
+{% load staticfiles%}
+{% block titleblock %}Allocate Master Property
+{% endblock %}
+{% block bodyblock %}
+<section id="inner-headline">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="inner-heading">
+                    <ul class="breadcrumb">
+                        <li><a href="{% url 'adminhome' %}"><i class="icon-home"></i> Home</a> <i class="icon-angle-right"></i></li>
+                        <li class="active">Allocate Master Property</li>
+                    </ul>
+                    <h2>Allocate Master Property</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="container">
+    <div class="container">
+        <div class="row">
+            <div class="span10">
+
+                <div style="background-image: url('images/bg-01.jpg');">
+                    <div>
+                        <!-- <form role="form" class="contactForm" action="." method="POST"
+                            id="AddMPForm">-->
+                           {% csrf_token %}                           
+                            Master Property:
+                            
+                            <select name="pr_msp" required class="form-data" id="msp_list2" placeholder="new hint" required>
+                                <option value="" selected="selected">Select Master Property</option>
+                                {% for item in obj_msp %}
+                                <option  value={{item.id}}> {{item.msp_name}} {{item.msp_address}}</option>
+                                {% endfor %}
+                            </select><br />
+                            
+                            <div id="property" class="hidden">
+                               
+                            </div>
+                        
+                            Agent:
+                            <select name="agentx" id="selectedagent" >
+                                <option selected="selected" value="" >Select Agent</option>
+                                {% for item in obj_agent %}
+                                <option  value={{item.id}}>{{item.first_name}} {{item.last_name}}</option>
+                                {% endfor %}
+                            </select><br />
+                           
+                            <button id="btnsuccess" class='btn btn-success btn-rounded'>Allocate this Property</button>
+                            
+                        <!-- </form> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -5,107 +5,90 @@
 {% endblock %}
 
 {% block bodyblock %}
-<section id="inner-headline">
-    <div class="container">
-        <div class="row">
-            <div class="span12">
-                <div class="inner-heading">
-                    <ul class="breadcrumb">
-                        <li><a href="{% url 'admin_index' %}">Home</a> <i class="icon-angle-right"></i></li>
-                        <li><a href="{% url 'admin_agent_requests' %}">Agents</a> <i class="icon-angle-right"></i></li>
-                        <li class="active">Agent details</li>
-                    </ul>
-                    <h2>Agent details</h2>
+    <section id="inner-headline">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <div class="inner-heading">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'admin_index' %}">Home</a> <i class="icon-angle-right"></i></li>
+                            {% comment %} <li><a href="{% url 'admin_agent_requests' %}">Agents</a> <i class="icon-angle-right"></i></li> {% endcomment %}
+                            <li class="active">Agent details</li>
+                        </ul>
+                        <h2>Agent details</h2>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<section id="container">
+    </section>
+    <section id="container">
         <div class="container">
             <div class="row">
                 <div class="span10">
     
                     <div style="background-image: url('images/bg-01.jpg');">
-                        <div>
+                        {% if agents %}
+                            <input placeholder="Enter agent name to search" class="span10" id="search_agent" type="text">
+                        {% endif %}
+                        <div id="tbl_agents">
     
                             {% if agents %}
-                            <input placeholder="Enter agent name to search" class="span10" id="search" type="text">
-                            <table class="table" id="tbl_agents">
-                                <tr class="success">
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Email</th>
-                                    <th colspan="2">Address</th>
-                                    <th>Date of Request</th>
-                                    <th>Profile</th>
-                                    <th>Status</th>
-                                    <th>Reject</th>
-                                    <th>View</th>
-                                </tr>
-    
-                                {% for agent in agents %}
-                                <tr class="info">
-                                    <td>{{ agent.first_name }} {{ agent.last_name }}</td>
-                                    <td>{{ agent.ag_contact }}</td>
-                                    <td>{{ agent.email }}</td>
-                                    <td colspan="2">{{ agent.ag_local_address }}</td>
-                                    <td>{{ agent.date_joined }}</td>
-                                    <td> <img src="{{ MEDIA_URL }}{{ agent.ag_profile_image }}" height="100px" width="100px"
-                                            alt="{{ agent.username }}">
-                                    </td>
-                                
-                                    {% if agent.is_active %} 
-                                        <td id="td{{agent.id}}">Active</td>
-                                        <td><input type="button" class="agent-act btn-danger btn-rounded" data-id="{{ agent.id }}" data-act="0" value="Retire"></td> 
-                                    {% else %} 
-                                        <td id="td{{agent.id}}" >Retired</td>
-                                        <td><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" value="Activate"></td>
-                                    {% endif %}
-                                    
-                                    <td>
-                                        <form method="POST" action="{% url 'admin_agent_profile' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="id" value="{{ agent.id }}">
-                                            <input type="submit" class="btn-rounded btn-info" name="submit" value="View">
-                                        </form>
-                                    </td>
-                                </tr>
-    
-                                {% endfor %}
-                                <!-- <div class="pagination">
-                                    <ul>
-                                        <li class="active"><a href="#">Prev</a></li>
-                                     
-                                        <li class="active"><a href="#">Next</a></li>
-                                    </ul>
-                                </div> -->
-                          
+                                {% comment %} <input placeholder="Enter agent name to search" class="span10" id="search" type="text"> {% endcomment %}
+                                <table class="table fixed_header">
+                                    <thead>
+                                        <tr class="success">
+                                            <th>Name</th>
+                                            <th>Contact</th>
+                                            <th colspan="2">Email</th>
+                                            <th colspan="3">Address</th>
+                                            <th>Date of Request</th>
+                                            <th>Profile</th>
+                                            <th>Status</th>
+                                            <th>Reject</th>
+                                            <th>View</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for agent in agents %}
+                                            <tr>
+                                                <td>{{ agent.first_name }} {{ agent.last_name }}</td>
+                                                <td>{{ agent.ag_contact }}</td>
+                                                <td colspan="2">{{ agent.email }}</td>
+                                                <td colspan="3">{{ agent.ag_local_address }}</td>
+                                                <td>{{ agent.date_joined }}</td>
+                                                <td> <img src="{{ MEDIA_URL }}{{ agent.ag_profile_image }}" height="100px" width="100px"
+                                                        alt="{{ agent.username }}">
+                                                </td>
+                                            
+                                                {% if agent.is_active %} 
+                                                    <td id="td{{agent.id}}">Active</td>
+                                                    <td><input type="button" class="agent-act btn-danger btn-rounded" data-id="{{ agent.id }}" data-act="0" value="Retire"></td> 
+                                                {% else %} 
+                                                    <td id="td{{agent.id}}" >Retired</td>
+                                                    <td><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" value="Activate"></td>
+                                                {% endif %}
+                                                
+                                                <td>
+                                                    <form method="POST" action="{% url 'admin_agent_profile' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="id" value="{{ agent.id }}">
+                                                        <input type="submit" class="btn-rounded btn-info" name="submit" value="View">
+                                                    </form>
+                                                </td>
+                                                <td class="allocation">
+                                                    {% if agent.is_active %}
+                                                        <input type="button" class="agent-allocate btn-success btn-rounded" data-id="{{ agent.id }}"  value="Allocate">
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+            
+                                        {% endfor %}
                             
-                        </table>
-                        {% if agents.has_other_pages %}
-                            <div class="pagination">
-                            <ul class="pagination">
-                                {% if agents.has_previous %}
-                                <li class="active"><a href="?page={{ agents.previous_page_number }}">Prev</a></li>
-                                {% else %}
-                                <li class="disabled"><a href="">Prev</a></li>
-                                {% endif %}
-                                {% for i in agents.paginator.page_range %}
-                                {% if agents.number == i %}
-                                <li class="active"><a href="">{{ i }} </a></li>
-                                {% else %}
-                                <li><a href="?page={{ i }}">{{ i }}</a></li>
-                                {% endif %}
-                                {% endfor %}
-                                {% if agents.has_next %}
-                                <li><a href="?page={{ agents.next_page_number }}">Next</a></li>
-                                {% else %}
-                                <li class="disabled"><span>Next</span></li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                            {% endif %}
+                                    </tbody>
+                                </table>
+                            
+                            {% else %}
+                                <strong>No new Requests.</strong>
                             {% endif %}
                         </div>
                     </div>

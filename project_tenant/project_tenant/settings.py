@@ -17,12 +17,9 @@ import psycopg2
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
-print(MEDIA_DIR)
 MEDIA_ROOT = MEDIA_DIR
-print(MEDIA_ROOT)
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-print(MEDIA_URL)
 STATICFILES_DIRS = [STATIC_DIR, ]
 
 # Quick-start development settings - unsuitable for production

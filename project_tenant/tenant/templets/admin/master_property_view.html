@@ -10,7 +10,7 @@ Agent List
             <div class="span12">
                 <div class="inner-heading">
                     <ul class="breadcrumb">
-                        <li><a href="{% url 'adminhome' %}"><i class="icon-home"></i> Home</a> <i class="icon-angle-right"></i></li>
+                        <li><a href="{% url 'admin_index' %}"><i class="icon-home"></i> Home</a> <i class="icon-angle-right"></i></li>
                         <li class="active">Master Property</li>
                     </ul>
                     <h2>Master Property</h2>
@@ -19,6 +19,30 @@ Agent List
         </div>
     </div>
 </section>
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span></br>
+    <div>
+    <input type="hidden" id='id'>
+    Address<input type="text" disabled id="pr_address" /></br>
+    Clone<input type="text" disabled id="pr_clone" /></br>
+    Status<input type="text" disabled id="pr_status" /></br>
+    Deposite<input type="text" id='pr_deposite' ></br>
+    Rent<input class='desimal_input' type="text" id='pr_rent'/></br>
+    description<input type='text' id='pr_description'>
+    </br>
+    <button class="btn btn-info btn-rounded btn-medium" id="save">Save</button>
+    <button class="btn btn-danger btn-rounded btn-medium" id="close">Cancel</button>
+
+
+    </div>
+  </div>
+
+</div>
+
 <section id="container">
     <div class="container">
         <div class="row">
@@ -33,39 +57,40 @@ Agent List
                                 <th>Name</th>
                                 <th>Address</th>
                                 <th>Detail</th>
-                                <th>Allocate</th>
-                                <th>Sold Out</th>
+                                <th>No of Clones</th>
+                                <th>Alloacted clones</th>
+                                <th>Unallocated clones</th>
+                                <th>No of properties</th>
+                                <th>Alloacted properties</th>
+                                <th>Unallocated properties</th>
+                                <th>Sold</th>
                             </tr>
 
                             {% for property in master_property_list %}
-                            {% for mp in allocated_mp %}
-                            {% if property.id != allocated_mp.al_master_id %}
-                            <tr class="info">
-                                <td>{{ property.msp_name}} </td>
-                                <td>{{ property.msp_address }}</td>
-                                <td>{{ property.msp_description }}</td>
-                                <td>    <form method="GET" action="{% url 'allocate_msp' property.id %}">
-                                        {% csrf_token %}
-                                       
-                                        <input type="submit" class="btn btn-success" name="submit" value="Allocate Agent">
-                                    </form>
-                                </td>
-                                <td>
-                                    <form method="POST" action="{% url 'master_property_soldout' property.id %}">
-                                        {% csrf_token %}
-                                        {% if property.msp_is_active == True %}
-                                        <input type="submit" name="submit" class="btn btn-theme" value="Sold Out">
-                                        {% endif %}
-                                    </form>
-                                </td>
-                            
-                            </tr>
-                            {% endif %}
+                                <tr>
+                                    <td>{{ property.msp_name}} </td>
+                                    <td>{{ property.msp_address }}</td>
+                                    <td>{{ property.msp_description }}</td>
+                                    <td>{{ property.no_of_clones }}   <a class="show_data" data-id="{{property.id}}" data-hidden="1" data-act="all_clones"><i class="icon-angle-down"></i></a></td>
+                                    <td>{{ property.allocated_clones }}   <a class="show_data" data-id="{{property.id}}" data-hidden="1" data-act="allocated_clones"><i class="icon-angle-down"></i></a></td>
+                                    <td>{{ property.unallocated_clones  }}  <a class="show_data" data-id="{{property.id}}" data-hidden="1" data-act="unallocated_clones"><i class="icon-angle-down"></i></a></td>
+                                    <td>{{ property.no_of_property }}   <a class="show_data" data-id="{{property.id}}" data-hidden="1" data-act="all_properties"><i class="icon-angle-down"></i></a></td>
+                                    <td>{{ property.allocated_properties}}   <a class="show_data" data-id="{{property.id}}" data-hidden="1" data-act="allocated_properties"><i class="icon-angle-down"></i></a></td>
+                                    <td>{{ property.unallocated_properties }}  <a class="show_data" data-id="{{property.id}}" data-hidden="1" data-act="unallocated_properties"><i class="icon-angle-down"></i></a> </td>
+                                    <td><input type="button" class="delete_master btn-danger btn-rounded" data-id="{{ property.id }}"  value="Sold"></td>
+                                </tr>
+                                {% autoescape off %}
+                                    <tr id="tr{{ property.id }}"  class="accordion-body collapse hidden" style="height: max-content;">
+                                        <td id="td{{ property.id }}"  colaspan = 9>
+                                        
+                                        </td>
+                                    </tr>
+                                {% endautoescape %}
+
                             {% endfor %}
-                            {% endfor %}
-                            
+                            </div>
                         </table>
-                        <div class="pagination">
+                        {% comment %} <div class="pagination">
                                 <ul class="pagination">
                                     {% if master_property_list.has_previous %}
                                     <li class="active"><a href="?page={{ master_property_list.previous_page_number }}">Prev</a></li>
@@ -85,7 +110,7 @@ Agent List
                                     <li class="disabled"><span>Next</span></li>
                                     {% endif %}
                                 </ul>
-                            </div>
+                            </div> {% endcomment %}
                         {% else %}
                         <strong>No new Requests.</strong>
                         {% endif %}
