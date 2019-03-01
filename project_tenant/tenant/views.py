@@ -1,17 +1,37 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import (authenticate,
+                                 login,
+                                 logout)
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.shortcuts import HttpResponseRedirect, render, HttpResponse
+from django.core.paginator import (EmptyPage,
+                                   PageNotAnInteger,
+                                   Paginator)
+from django.shortcuts import (HttpResponseRedirect,
+                              render,
+                              HttpResponse)
 from django.urls import reverse
 
-from tenant.decorators import for_admin, for_staff
-from tenant.forms import AgentForm, TenantRegistratonForm
-from tenant.models import (TblAgent, TblAgentAllocation, TblMasterProperty,
-                           TblMasterPropertyClone, TblProperty,
-                           TblPropertyAllocation, TblRentAllocation, TblTenant,
-                           TblVisit, ViewMasterProperties)
+from tenant.decorators import (for_admin,
+                               for_staff)
+from tenant.forms import (AgentForm,
+                          TenantRegistratonForm)
+from tenant.models import (TblAgent,
+                           TblAgentAllocation,
+                           TblMasterProperty,
+                           TblMasterPropertyClone,
+                           TblProperty,
+                           TblPropertyAllocation,
+                           TblRentAllocation,
+                           TblTenant,
+                           TblVisit,
+                           ViewMasterProperties)
 
-from django.db.models import Prefetch, Count, Subquery, OuterRef
+from django.db.models import (Prefetch,
+                              Count,
+                              Subquery,
+                              OuterRef,
+                              F,
+                              Q,
+                              )
 
 # Create your views here.
 
@@ -139,17 +159,9 @@ def agent_request_reject(request):
     TblAgent.objects.filter(id=id).delete()
     return view_agent_request(request)
 
-
-# Viewing the agent request in more detailed View
-@for_admin
-def agent_profile(request):
-    id = request.POST['id']
-    agent = TblAgent.objects.get(id=id)
-    return render(request, 'admin/agent_profile.html',
-                  {'agent': agent})
-
-
 # returning search result of agent requests.
+
+
 def get_agents(starts_with=''):
     agents = []
     first_name = starts_with
@@ -286,6 +298,97 @@ def agent_active_search(request):
 
     return render(request, 'admin/active_agents.html',
                   {'agents': agents, })
+
+# End-Page Agent View..................................................................................................
+
+
+# -Page Agent profile View.......................................................................................
+# Viewing the agent request in more detailed View
+@for_admin
+def agent_profile(request):
+    print("\n\n\n\n\n\n")
+    id = request.POST['id']
+    agent = TblAgent.objects.get(id=id)
+
+    details = TblAgentAllocation.objects\
+        .select_related('al_master')\
+        .select_related('al_master__cln_master')\
+        .filter(al_agent=agent)\
+        .annotate(
+            properties=Count('al_master__tblproperty')
+        )\
+        .annotate(
+            unallocated=Count(
+                'al_master__tblproperty',
+                filter=Q(al_master__tblproperty__pr_is_allocated=False))
+        )\
+        .annotate(
+            allocated=Count(
+                'al_master__tblproperty',
+                filter=Q(al_master__tblproperty__pr_is_allocated=True))
+        )\
+        .order_by(
+            'al_master__cln_master__msp_name',
+            'al_master__cln_alias',
+            '-al_master__cln_is_master_clone'
+        )
+    for detail in details:
+        print("Master =", detail.al_master.cln_master.msp_name, end="\t")
+        print("Clone =", detail.al_master.cln_alias, end="\t")
+        print("Properties =", detail.properties, end="\t")
+        print("Unallocated =", detail.unallocated, end="\t")
+        print("Allocated =", detail.allocated, end="\n")
+
+    return render(request, 'admin/agent_profile.html',
+                  {'agent': agent, 'allocations': details})
+
+# showing Allocation data of Agent
+@for_admin
+def show_data_agent(request):
+
+    try:
+        act = request.GET.get('act')
+        id = request.GET.get('id')
+        print(act)
+        data = None
+        if act == 'all_properties':
+            data = TblProperty.objects\
+                .filter(pr_master=id)\
+                .order_by('pr_address')
+
+            for d in data:
+                print(d.pr_master.cln_alias, d.pr_address)
+        elif act == 'allocated_properties':
+
+            data = TblPropertyAllocation.objects\
+                .select_related('pa_tenant')\
+                .select_related('pa_property')\
+                .filter(pa_property__pr_master=id)\
+                .order_by('pa_property__pr_address')
+            for d in data:
+                print(d.pa_property.pr_master.cln_alias,
+                      d.pa_property.pr_address, d.pa_tenant.tn_name)
+
+        elif act == 'unallocated_properties':
+            data = TblProperty.objects\
+                .select_related('pr_master')\
+                .filter(pr_master=id,pr_is_allocated=False)\
+                .order_by('pr_address')
+
+            for d in data:
+                print(d.pr_master.cln_alias, d.pr_address)
+
+        print(data)
+
+        return render(request, 'admin/show_data.html',
+                      {'rows': data, 'act': act, 'msp': id})
+    except Exception as e:
+        print("error ", e)
+        return HttpResponse('''<div  style="color: red;
+                                align: right; width: max-content; " >
+                                <right>Something Went Wrong While
+                                Fetching Requested data</right></div>''')
+
 
 # End-Page Agent View..................................................................................................
 
@@ -446,32 +549,6 @@ def show_data(request):
         print(act)
         data = None
         if act == 'all_clones':
-            # data = TblMasterPropertyClone.objects.filter(
-            #     cln_master=id).order_by(
-            # '-cln_is_master_clone','cln_alias')
-
-            # data = TblMasterPropertyClone.objects.prefetch().filter(
-            #     cln_master=id).values('clone')\
-            # .order_by('-cln_is_master_clone','cln_alias')
-
-            # data = TblProperty.objects\
-            #     .values('pr_master')\
-            #     .filter(pr_master__cln_master=id)\
-            #         .annotate(properties = Count('id',
-            # distinct=True))\
-            #             .group_by('pr_master__id')
-
-            # data = TblMasterPropertyClone.objects\
-            # .filter(cln_master=id)\
-            #     .prefetch_related(Prefetch(
-            #         queryset=Tbl
-
-            #     )).order_by('-cln_is_master_clone','cln_alias')
-
-            # properties = TblProperty.objects.all()
-            # data = TblMasterPropertyClone.objects\
-            # .filter(id__in=Subquery(properties.values('pr_master')))
-
             data = TblMasterPropertyClone.objects.filter(cln_master=id)\
                 .annotate(
                     properties=Count('tblproperty',
@@ -568,7 +645,7 @@ def show_data(request):
         print("error ", e)
         return HttpResponse('''<div  style="color: red;
                                 align: right; width: max-content; " >
-                                <right>Something Went Wrong While 
+                                <right>Something Went Wrong While
                                 Fetching Requested data</right></div>''')
 
 # Editing Property details
@@ -723,23 +800,16 @@ def create_clone(request):
 # End-Page Add Create Clone View..................................................................................
 
 # -Page manage Clone View.........................................................................................
-# creating new clone
+# Moving property from one clone to another
 @for_admin
 def manage_clones(request):
     msp_list = []
-    # if request.method =='POST':
-    #     obj_msp=TblMasterProperty.objects\
-    # .get(id=request.POST['pr_msp'])
-    #     no = int(request.POST['msp_clone_no'])
-    #     if no > 0 and no <= 50:
-    #         for n in range(1, no+1):
-    #             cln = TblMasterPropertyClone.objects.create(
-    #                 cln_alias=request.POST.get('msp_clone'+str(n)),
-    #                 cln_master=obj_msp,
-    #                 cln_is_allocated=False,
-    #                 cln_is_active=True)
-    #             cln.save()
-
+    if request.method == 'POST':
+        clone = request.POST['to_clone']
+        properties = request.POST.getlist('move_to[]')
+        for pr in properties:
+            TblProperty.objects.filter(id=pr)\
+                .update(pr_master=clone)
     # else:
     lst = request.POST.getlist('move_to[]')
     print(lst)
@@ -751,28 +821,62 @@ def manage_clones(request):
     return render(request, 'admin/manage_clones.html',
                   {'obj_msp': msp_list})
 
+# showing properties of selected clone or master property
+
 
 def show_properties(request):
     master = request.GET.get('id')
     is_master_property = request.GET.get('is_master')
-    if is_master_property:
+    if is_master_property == "true":
+        to_clone = request.GET['cln']
         data = TblProperty.objects.\
             select_related('pr_master')\
             .filter(pr_master__cln_master=master)\
+            .exclude(pr_master=to_clone)\
             .order_by('-pr_master__cln_is_master_clone',
                       'pr_master__cln_alias',
                       'pr_address')
-        # print(data.values())
+    else:
+        data = TblProperty.objects.\
+            select_related('pr_master')\
+            .filter(pr_master=master)\
+            .order_by('-pr_master__cln_is_master_clone',
+                      'pr_master__cln_alias',
+                      'pr_address')
     return render(request, 'admin/show_properties.html',
-     {'rows': data, })
+                  {'rows': data, })
+
+# showing list of clones
 
 
 def move_to_clone_list(request):
     clones = TblMasterPropertyClone.objects.filter(
         cln_master=request.GET['msp']).order_by('id')
-    response = """Select Clone to move:
-                <select name="pr_msp_clone" class="form-data"
-                 id="cln_list" placeholder="new hint">
+    response = """move in clone:
+                <select name="to_clone" class="form-data"
+                 id="to_clone" placeholder="new hint">
+                 <option value="" selected="selected">
+                 Select Clone</option>
+                """
+    for clone in clones:
+        response += "<option  value="+str(clone.id)+"> "\
+            + clone.cln_alias+" </option>"
+    response += "</select><br />"
+    return HttpResponse(response)
+
+# showing list of clones of selected master property
+# excluding selected clone in move_to clone.
+
+
+def move_from_clone_list(request):
+    clones = TblMasterPropertyClone.objects\
+        .filter(cln_master=request.GET['msp'])\
+        .exclude(id=request.GET['cln']).order_by('id')
+    response = """move from clone:
+                <select name="from_clone" class="form-data"
+                 id="from_clone" placeholder="new hint">
+                 <option value="" selected="selected">
+                 Select Clone</option>
                 """
     for clone in clones:
         response += "<option  value="+str(clone.id)+"> "\
@@ -788,20 +892,3 @@ def move_to_clone_list(request):
 @for_staff
 def agent_index(request):
     return render(request, 'agent/base.html')
-
-
-def allocate_msp(request, msp_id=None):
-    obj_msp = TblMasterProperty.objects.get(id=msp_id)
-    obj_agent = []
-    if request.method == 'POST':
-        al_master = TblMasterProperty.objects.get(id=request.POST['msp'])
-        al_agent = TblAgent.objects.get(id=request.POST['agentx'])
-        obj = TblAgentAllocation.objects.get_or_create(
-            al_agent=al_agent, al_master=al_master)
-        obj[0].save()
-        return HttpResponseRedirect(reverse(adminhome))
-
-    obj_agent = TblAgent.objects.filter(
-        is_active=True, is_staff=True, is_superuser=False)
-    return render(request, 'admin/allocate_m_roperty.html',
-                  {'obj_msp': obj_msp, 'obj_agent': obj_agent})

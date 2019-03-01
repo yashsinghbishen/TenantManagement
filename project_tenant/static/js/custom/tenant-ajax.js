@@ -6,12 +6,12 @@ $('.agent-act').live("click", function () {
     act = $(this).attr("data-act");
     var msg;
     if (act == "0") {
-        msg="Are you sure to retire this Agent?"
+        msg = "Are you sure to retire this Agent?"
     }
     else {
-        msg="Are you sure to Activate this Agent?"
+        msg = "Are you sure to Activate this Agent?"
     }
-    if(window.confirm(msg)){
+    if (window.confirm(msg)) {
         $.get('/admin/agent_action/', { id: ag_id, is_active: act }, function (data) {
         });
         if (act == "0") {
@@ -26,9 +26,9 @@ $('.agent-act').live("click", function () {
             $(this).attr("data-act", "0");
             $(this).val("Retire");
             $(this).removeClass("btn-success").addClass("btn-danger");
-            $(this).parent().siblings('.allocation').html('<input type="button"'+
-            ' class="agent-allocate btn-success btn-rounded"'+
-            ' data-id="'+ag_id+'" value="Allocate">');
+            $(this).parent().siblings('.allocation').html('<input type="button"' +
+                ' class="agent-allocate btn-success btn-rounded"' +
+                ' data-id="' + ag_id + '" value="Allocate">');
         }
     }
 });
@@ -36,13 +36,13 @@ $('.agent-act').live("click", function () {
 // Allocating property to agent if he is active
 $('.agent-allocate').live("click", function () {
     var ag_id = $(this).attr("data-id");
-    location.href = '/admin/allocate_clone/?agent='+ag_id;
+    location.href = '/admin/allocate_clone/?agent=' + ag_id;
 });
 
 
-$(function (){
+$(function () {
     $("select").select2();
-    });
+});
 
 // Searching in Agent request on search textbox
 $('#search').keyup(function () {
@@ -63,6 +63,32 @@ $('#search_agent').keyup(function () {
     });
 });
 
+// Showing agent allocation details
+$('.show_data_agent').click(function () {
+    var id = $(this).attr('data-id');
+    var hidden = $(this).attr('data-hidden');
+    var act = $(this).attr('data-act');
+
+    if (hidden == '1') {
+        $(this).parent().siblings().children(
+            '.show_data_agent').html('<i class="icon-angle-down"></i>');
+        $(this).parent().siblings().children(
+            '.show_data_agent').attr('data-hidden', '1');
+        $(this).parent().parent().next().removeClass("hidden");
+        $(this).html('<i class="icon-angle-up"></i>');
+        $(this).attr('data-hidden', '0');
+        $this = $(this)
+        $.get('/admin/show_data_agent/', { id: id, act: act }, function (data) {
+            $this.parent().parent().next().children().html(data);
+        });
+    }
+    else if (hidden == '0') {
+        $(this).parent().parent().next().addClass("hidden");
+        $(this).html('<i class="icon-angle-down"></i>');
+        $(this).attr('data-hidden', '1');
+    }
+})
+
 // Enabling User to create clone 
 // Showing user clone_div area to create clone
 $("#create_clone").change(function () {
@@ -76,71 +102,143 @@ $("#create_clone").change(function () {
 });
 
 
-// Showing user properties area to create clone
-$("#manage_by_property").change(function () {
-    if ($(this).attr("checked")) {
-        $("#clone_list").removeClass("hidden");
-        $.get('/admin/show_properties/', { id: $('#msp').val(), is_master:true }, function (data) {
-            $('#clone_list').html(data);
-        });
-    }
-    else {
-        $("#clone_list").addClass('hidden');
-    }
 
-});
-
-
-
-$('.move_from').live('click',function () {
+$('.move_from').live('click', function () {
     // alert($('#move_from option:selected'))
     $('#move_from option:selected').remove().appendTo('#move_to');
-        
+    $('#move_to option').attr('selected', 'selected');
+
 });
 
-$('.move_to').live('click',function () {
+$('.move_to').live('click', function () {
     // alert($('#move_from option:selected'))
     $('#move_to option:selected').remove().appendTo('#move_from');
-        
+    $('#move_to option').attr('selected', 'selected');
+
 });
 
-$('.move_all_from').live('click',function () {
+$('.move_all_from').live('click', function () {
     // alert($('#move_from option:selected'))
     $('#move_from option').remove().appendTo('#move_to');
-        
+    $('#move_to option').attr('selected', 'selected');
+
 });
 
-$('.move_all_to').live('click',function () {
+$('.move_all_to').live('click', function () {
     // alert($('#move_from option:selected'))
     $('#move_to option').remove().appendTo('#move_from');
-        
+    $('#move_to option').attr('selected', 'selected');
+
 });
 
-
+function check_existance(){
+    $('#move_to option').each(function(){
+        $('#move_from option[value='+($(this).val())+']').remove();
+    }); 
+      
+}
 
 // Showing user clone_div area to create clone
 $("#msp").change(function () {
-    // if ($(this).val()!="") {
-    //     $("#clone_div").removeClass("hidden");
-    // }
-    // else {
-    //     $("#clone_div").addClass('hidden');
-    // }
-    if ($(this).val() == "Select item") {
+    if ($(this).val() == "") {
         $("#property").addClass('hidden');
     }
     else {
         $("#property").removeClass("hidden");
-        // if(){
-        //     alert($(this).attr('data-unallocated'))}
-        $.get('/admin/move_to_clone_list/', { msp: $(this).val()}, function (data) {
+        $.get('/admin/move_to_clone_list/', { msp: $(this).val() }, function (data) {
             $('#property').html(data);
-            $('#cln_list').select2();
+            $('#to_clone').select2();
         });
     }
 
 
 });
+
+// Showing user clone_div area to create clone
+$("#msp_create_clone").change(function () {
+    if ($(this).val() == "") {
+        $("#property").addClass('hidden');
+    }
+    else {
+        $("#property").removeClass("hidden");
+        
+    }
+
+
+});
+
+
+// Showing user clones for selecting property
+$("#to_clone").live('change', function () {
+
+    $("#manage_by_property").removeAttr('checked')
+    if ($(this).val() == "") {
+        $("#clone_div").addClass("hidden");
+    }
+    else {
+        $("#clone_div").removeClass("hidden");
+        $("#property_list").addClass('hidden');
+        $('#clone_list').removeClass('hidden');
+        $.get('/admin/move_from_clone_list/', {
+            msp: $('#msp').val(),
+            cln: $('#to_clone').val()
+        }, function (data) {
+            $('#clone_list').html(data);
+            $('#from_clone').select2();
+        });
+    }
+
+
+});
+
+// Showing user clones for selecting property
+$("#from_clone").live('change', function () {
+    if ($(this).val() == "") {
+        $("#property_list").addClass("hidden");
+    }
+    else {
+        $('#property_list').removeClass("hidden");
+        $.get('/admin/show_properties/', {
+            id: $('#from_clone').val(),
+            is_master: false
+        }, function (data) {
+            $('#property_select').html(data);
+            check_existance();
+        });
+    }
+
+
+});
+
+// Showing user properties area to create clone
+$("#manage_by_property").change(function () {
+    if ($(this).attr("checked")) {
+        $("#clone_list").addClass('hidden');
+        $('#property_list').removeClass("hidden");
+        $.get('/admin/show_properties/', {
+            id: $('#msp').val(),
+            cln: $('#to_clone').val(),
+            is_master: true
+        }, function (data) {
+            $('#property_select').html(data);
+            check_existance();
+        });
+    }
+    else {
+        $("#property_list").addClass('hidden');
+        $('#clone_list').removeClass('hidden');
+        $.get('/admin/move_from_clone_list/', {
+            msp: $('#msp').val(),
+            cln: $('#to_clone').val()
+        }, function (data) {
+            $('#clone_list').html(data);
+            $('#from_clone').select2();
+        });
+    }
+
+});
+
+
 
 // Creating the list of clones.
 $('#clone_no').keyup(function () {
@@ -158,7 +256,7 @@ $('#clone_no').keyup(function () {
 
 // Showing Admin clone list while allocating Agent to Property.
 $("#msp_list").change(function () {
-    
+
     if ($(this).val() == "Select item") {
         $("#property").addClass('hidden');
     }
@@ -166,8 +264,10 @@ $("#msp_list").change(function () {
         $("#property").removeClass("hidden");
         // if(){
         //     alert($(this).attr('data-unallocated'))}
-        $.get('/admin/property_clone_list/', { msp: $(this).val() ,
-            unallocated:$(this).attr('data-unallocated')}, function (data) {
+        $.get('/admin/property_clone_list/', {
+            msp: $(this).val(),
+            unallocated: $(this).attr('data-unallocated')
+        }, function (data) {
             $('#property').html(data);
             $('#cln_list').select2();
         });
@@ -182,7 +282,10 @@ $("#msp_list").change(function () {
 $("#add_address").click(function () {
     var num = $("#num").val();
     // var new_html = '<input type="text" required name="pr_address'+num+'"/><a class="icon-minus-sign remove_address" ></a>';
-    var new_html = '<div class="input-append" style="display:flex;" ><input class="span2" id="appendedInputButton" name="pr_address' + num + '" type="text"><button class="btn btn-theme remove_address" id="add_address" type="button"><i class="icon-minus"></i></button></div>'
+    var new_html = '<div class="input-append" style="display:flex;" >' +
+        '<input class="span2" id="appendedInputButton" name="pr_address' +
+        num + '" type="text"><button class="btn btn-theme remove_address"' +
+        'id="add_address" type="button"><i class="icon-minus"></i></button></div>'
     var new_num = Number(num) + 1;
     $("#num").val(new_num);
     $("#addresses").append(new_html);
@@ -198,7 +301,7 @@ $(".remove_address").live("click", function () {
 
 
 
-$('.decimal_input').live('keyup',function () {
+$('.decimal_input').live('keyup', function () {
     var $this = $(this);
 
     // Get the value.
@@ -281,47 +384,46 @@ $('#close').click(function () {
     $('#myModal').css('display', 'none')
 });
 
-$('.deallocate_clone').live('click',function () {
-    $.get('/admin/deallocate_clone/',{id: $(this).attr('data-id')},function(data){
-        if(data=='1'){
+$('.deallocate_clone').live('click', function () {
+    $.get('/admin/deallocate_clone/', { id: $(this).attr('data-id') }, function (data) {
+        if (data == '1') {
             alert('Property deallocated ');
             location.reload('/admin/view_master_property/');
         }
-        else{
+        else {
             alert('Error accured while deallocating Property.')
         }
     })
 });
-$('.delete_clone').live('click',function () {
-    $.get('/admin/delete_clone/',{id: $(this).attr('data-cln'),msp : $(this).attr('data-msp')},function(data){
-        if(data=='1'){
+$('.delete_clone').live('click', function () {
+    $.get('/admin/delete_clone/', { id: $(this).attr('data-cln'), msp: $(this).attr('data-msp') }, function (data) {
+        if (data == '1') {
             alert('Clone deleted');
             location.reload('/admin/view_master_property/');
         }
-        else{
+        else {
             alert('Error accured while deleting Clone.')
         }
     })
 });
 
-$('.allocate_clone').live('click',function () {
+$('.allocate_clone').live('click', function () {
     var msp = $(this).attr('data-msp');
     var cln = $(this).attr('data-id');
-    location.href = '/admin/allocate_clone/?msp='+msp+'&cln='+cln;
+    location.href = '/admin/allocate_clone/?msp=' + msp + '&cln=' + cln;
 });
 
-$('.delete_master').live('click',function () {
-    if (confirm('Are you sure to remove this master property?'))
-    {
+$('.delete_master').live('click', function () {
+    if (confirm('Are you sure to remove this master property?')) {
         var $this = $(this);
-        $.get('/admin/delete_master_property/',{id: $(this).attr('data-id')},function(data){
-            if(data=='1'){
+        $.get('/admin/delete_master_property/', { id: $(this).attr('data-id') }, function (data) {
+            if (data == '1') {
                 // location.reload('/admin/view_master_property/');
                 $this.parent().parent().next().remove();
                 $this.parent().parent().remove();
                 alert('Property Sold and Removed from system ');
             }
-            else{
+            else {
                 alert('Error accured while Deleting Property.')
             }
         })
@@ -332,9 +434,9 @@ $('.delete_master').live('click',function () {
 
 
 function manage_form() {
-    $('#move_to option').attr('selected','selected')
+    $('#move_to option').attr('selected', 'selected')
     // alert('donr')
-    
+
 }
 
 
@@ -347,7 +449,7 @@ function manage_form() {
 //     var cln = document.forms["agent_allocation"]["pr_msp"].innerText;
 //     var msp = document.forms["agent_allocation"]["pr_msp_clone"].innerText;
 //     var agent = document.forms["agent_allocation"]["agentx"].innerText;
-    
+
 //     return window.confirm('clone '+cln+' of Master Property '+
 //         msp+' Will be alloacted to '+agent+' agent')
 // }
@@ -368,7 +470,7 @@ function manage_form() {
 //         }
 //         else {
 //             alert('Error in Allocation process');
-            
+
 //         }
 //     });
 // });

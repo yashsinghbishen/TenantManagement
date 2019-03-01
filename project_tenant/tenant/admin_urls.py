@@ -26,6 +26,10 @@ urlpatterns = [
     path('agent_requests/agent_profile/',
          views.agent_profile, name='admin_agent_profile'),
 
+    # Showing the data on master property
+    path('show_data_agent/', views.show_data_agent,
+         name='admin_show_data_agent'),
+
     # Activating and Retireing Agents
     path('agent_action/', views.agent_action,
          name='admin_agent_action'),
@@ -98,4 +102,9 @@ urlpatterns = [
     # Showing Clone list of selected Master property
     path('move_to_clone_list/', views.move_to_clone_list,
          name='admin_move_to_clone_list'),
+
+    # Showing Clone list of selected Master property 
+    # excluding the selected clone
+    path('move_from_clone_list/', views.move_from_clone_list,
+         name='admin_move_from_clone_list'),
 ]

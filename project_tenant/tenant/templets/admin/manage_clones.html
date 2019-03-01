@@ -24,7 +24,7 @@
 <section id="container">
     <div class="container">
         <div class="row">
-            <div class="span10">
+            <div class="span11">
                 <div style="background-image: url('images/bg-01.jpg');">
                     <div>
                         <form method="POST" action="{% url 'admin_manage_clones' %}"
@@ -46,9 +46,27 @@
                             class="checkbox"></br></br> {% endcomment %}
                         <div id="clone_div" class="hidden">
                             Manage by Master Property :<input type="checkbox" id="manage_by_property" name="msp_have_clones" class="checkbox"></br>
+                            
                             <div id="clone_list" class='hidden'>
 
                             </div>
+                            <div id="property_list" class='hidden row'>
+                                <div id="property_select" class='span4'>
+                                <select id="move_from" name="move_from" multiple>
+                                    
+                                </select>
+                                </div> 
+                                <div class='span4'>
+                                 <a class="move_from"><i class="icon-circle-arrow-right"></i></a>
+                                            <a class="move_to"><i class="icon-circle-arrow-left"></i></a>
+                                <select id="move_to" name="move_to[]" multiple>
+                                    {% comment %} <option value="{{ row.id }}">{{ row.pr_address}} {{ row.pr_master.cln_alias }}</option> {% endcomment %}
+                                </select>
+                                </br> <a class="move_all_from">Choose All<i class="icon-circle-arrow-right"></i></a>
+                                            <a class="move_all_to">Choose All<i class="icon-circle-arrow-left"></i></a>
+                                </div>
+                            </div>
+                            
                         </div>
                         <button class='btn btn-success btn-rounded'>Add Clone</button>
 
