@@ -127,7 +127,7 @@
                 <div class="row nomargin">
                     <div class="span4">
                         <div class="logo">
-                           <h1> <a href="{% url 'admin_index' %}">Home Renting<img src="{% static 'image/surfer.jpg' %}" height="70" width="100" /></a></h1>
+                           <h1> <a href="{% url 'admin_index' %}"><img src="{% static 'image/tmlogonew.png' %}" style="height:90px;" alt=""  /></a></h1>
                         </div>
                     </div>
                     <div class="span8">
@@ -165,7 +165,7 @@
                                             <a href="{% url 'admin_allocate_clone' %}">Allocate Agent </a>
                                         </li>
                                         <li class="dropdown">
-                                            <a href="#">Clones <i class="icon-angle-down"></i></a>
+                                            <a >Clones <i class="icon-angle-down"></i></a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="{% url 'admin_create_clone' %}">Create Clones</a></li>
                                                 <li><a href="{% url 'admin_manage_clones' %}">Manage properties of Clones</a></li>
@@ -266,7 +266,7 @@
 
     <!-- Template Custom JavaScript File -->
     <script src="{% static 'js/custom.js' %}"></script>
-
+    <script src="{% static 'js/notify.js' %}"></script>
     </body>
 
 </html>

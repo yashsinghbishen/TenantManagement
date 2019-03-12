@@ -63,15 +63,15 @@
                                             
                                                 {% if agent.is_active %} 
                                                     <td id="td{{agent.id}}">Active</td>
-                                                    <td><input type="button" class="agent-act btn-danger btn-rounded" data-id="{{ agent.id }}" data-act="0" value="Retire"></td> 
+                                                    <td><input type="button" class="agent-act btn-danger btn-rounded" data-id="{{ agent.id }}" data-act="0" data-view='common' value="Retire"></td> 
                                                 {% else %} 
                                                     <td id="td{{agent.id}}" >Retired</td>
-                                                    <td><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" value="Activate"></td>
+                                                    <td><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" data-view='common' value="Activate"></td>
                                                 {% endif %}
                                                 
                                                 <td>
-                                                    <form method="POST" action="{% url 'admin_agent_profile' %}">
-                                                        {% csrf_token %}
+                                                    <form method="GET" action="{% url 'admin_agent_profile' %}">
+                                                        {% comment %} {% csrf_token %} {% endcomment %}
                                                         <input type="hidden" name="id" value="{{ agent.id }}">
                                                         <input type="submit" class="btn-rounded btn-info" name="submit" value="View">
                                                     </form>

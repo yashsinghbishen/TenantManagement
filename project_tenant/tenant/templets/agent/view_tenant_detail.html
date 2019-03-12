@@ -1,0 +1,78 @@
+{% extends 'agent/Base.html' %}
+{% load staticfiles %}
+{% block titleblock %}
+tenant Profile
+{% endblock %}
+
+{% block bodyblock %}
+<section id="inner-headline">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="inner-heading">
+                    <ul class="breadcrumb">
+                        <li><a href="{% url 'agent_index' %}"><i class="icon-home"></i> Home</a> <i class="icon-angle-right"></i></li>
+                        <li class="active">Tenant details</li>
+                    </ul>
+                    <h2>Tenant details</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="container">
+    <div class="container">
+        <div class="row">
+            <div class="span8">
+                <div style="background-imtne: url('imtnes/bg-01.jpg');">
+                    <div class="box flyIn animated fadeInUp">
+                        <center>
+                            {% if tenant %}
+                            <table style="border-spacing:125px;">
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Image:</b></td>
+                                    <td style="padding:20px;"> <img src="{{ MEDIA_URL }}{{ tenant.tn_profile }}"
+                                            alt="no imtne of {{ tenant.tn_name }}"></td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Name:</b></td>
+                                    <td style="padding:20px;">{{ tenant.tn_name }}</td>
+                                    
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Contact:</b></td>
+                                    <td style="padding:20px;">{{ tenant.tn_contact }}</td>
+                                </tr>
+                                
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Local Address:</b></td>
+                                    <td style="padding:20px;">{{ tenant.tn_permanent_address }}</td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                    <td style="padding:20px;"><b>Joinning Date:</b></td>
+                                    <td style="padding:20px;">{{ tenant.tn_joining_date }}</td>
+                                </tr>
+                                <tr style="padding:20px;">
+                                   <td></td>
+                                    <td style="padding:20px;">
+                                        <form method="POST" action="{% url 'change_tenant_status' %}">
+                             
+                                            {% csrf_token %}
+                                            <input type="hidden" name="tid" value="{{ tenant.id }}">
+                                            <input type="submit" name="submit" class="btn btn-danger" {% if tenant.tn_is_active == True %} value="Deactivate" {% else %} value="Activate" {% endif %}>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            {% else %}
+                            <strong>Profile not found .</strong>
+                            {% endif %}
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

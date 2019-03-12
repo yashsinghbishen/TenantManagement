@@ -3167,7 +3167,7 @@ table th[class*="span"],
   height: auto;
 }
 
-.close {
+/* .close {
   float: right;
   font-size: 20px;
   font-weight: bold;
@@ -3185,7 +3185,7 @@ table th[class*="span"],
   cursor: pointer;
   opacity: 0.4;
   filter: alpha(opacity=40);
-}
+} */
 
 button.close {
   padding: 0;
@@ -5175,7 +5175,7 @@ input[type="submit"].btn.btn-mini {
   cursor: default;
   background-color: #fff;
 }
-
+/* 
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -5293,7 +5293,7 @@ input[type="submit"].btn.btn-mini {
 
 .modal-footer .btn-block + .btn-block {
   margin-left: 0;
-}
+} */
 
 .tooltip {
   position: absolute;

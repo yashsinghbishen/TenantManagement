@@ -1,0 +1,189 @@
+{% extends 'agent/Base.html' %}
+{% load staticfiles %}
+{% block titleblock %}
+Agent List
+{% endblock %}
+{% block bodyblock %}
+<section id="inner-headline">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="inner-heading">
+                    <ul class="breadcrumb">
+                        <li><a href="{% url 'agent_index' %}"><i class="icon-home"></i> Home</a> <i
+                                class="icon-angle-right"></i></li>
+                        <li class="active">Property</li>
+                    </ul>
+                    <h2>Property</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Modal Starts-->
+ <div id="myModal" class="modal">
+
+  <!-- Modal content -->
+
+  <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Property Allocation Details</h4>
+          </div>
+          <div class="modal-body">
+                <input type="hidden" id='id'>
+                Name : <input type="text" disabled id="tn_name" /></br></br>
+                {% comment %} Status : <input type="text" disabled id="tn_status" /></br></br> {% endcomment %}
+                New Status : <select name="status" id="tn_status" required>               
+                <option value="0">Property Not Allocated</option>
+                <option value="1">Visit</option>
+                <option value="2">Deal Accepted,aggrement under process</option>
+                <option value="3">Property handovered</option>
+                </select>
+                
+                </br>
+                </br>
+          </div>
+          <div class="modal-footer">
+              <center>  <button class="btn btn-info btn-rounded " id="save_tenant_status">Save</button>
+                <button class="btn btn-danger btn-rounded " id="close">Cancel</button></center>
+          </div>
+        </div>
+    
+      </div> 
+</div>
+<!--Modal Ends--> 
+
+<section id="container">
+    <div class="container">
+        <div class="row">
+
+                <div style="background-image: url('images/bg-01.jpg');">
+                    <div>
+                    <div class="span12">
+                <h4>Properties</h4>
+                {% if allocated_pr %}
+                <div class="tabbable tabs-left">
+                  <ul class="nav nav-tabs bold">
+                <li class="active"><a href="#all" data-toggle="tab">All</a></li>
+                  {% for mpr in allocated_mpr %}
+                    <li class=""><a href="#{{mpr.id}}" data-toggle="tab"> {{mpr.msp_name}}</a></li>
+                    {% endfor %}
+                  </ul>
+        
+                   <div class="tab-content">
+               <!-- First Tab -->
+                    <div class="tab-pane active" id="all">
+                        <table class="table fixed_header">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th colspan="2">Address</th>
+                                    <th>Rent</th>
+                                    <th>Deposite</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for property in allocated_pr %}
+
+                                <tr data-id='{{property.property_id}}'>
+                                    <td>{{ property.pr_address}} </td>
+
+                                    <td colspan="2"> {{property.pr_master.cln_master.msp_name}}, {{ property.pr_master.cln_master.msp_address }}</td>
+                                    <td>{{ property.pr_rent }}</td>
+                                    <td>{{ property.pr_deposite }}</td>
+                                    <td>{{ property.pr_description }}</td>
+
+                                    <td>{% if property.pr_is_allocated == True %}
+                                    <div class="dropdown">
+                                    <a class="dropdownlink" data-id="{{property.pr_master.id}}"  >Options <i class='icon-angle-down'></i></a>
+                                    <div class="dropdown-content">
+                                    <a data-pid='{{property.pr_master.id}}' data-toggle="tooltip" title="Deallocate Tenant to Property" class="deallocate_tenant"> Deallocate </a>
+                                    <a> Details </a>
+                                    <a> Add Rent Details </a>
+                                    <a> Edit Agreement </a>
+                                    </div>
+                                    </div>
+                                    {% else %}  <a class="allocate_tenant" data-toggle="tooltip" title="Allocate Tenant to Property" data-pid="{{property.pr_master.id}}" >Allocate <i class='icon-angle-right'></i></a></i> {% endif %}</td>
+                                   
+
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>                       
+                    </div>
+                   
+<!-- =======================================First Tab Ends ============================= -->
+
+                {% for mpr in allocated_mpr %}
+                <!-- All Other tab -->
+                    <div class="tab-pane" id="{{mpr.id}}">
+                        
+                        <table class="table fixed_header">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th colspan="2">Address</th>
+                                    <th>Rent</th>
+                                    <th>Deposite</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for property in allocated_pr %}
+                            {% if property.pr_master.cln_master.id == mpr.id %}
+                                <tr data-id='{{property.pr_master.id}}'>
+                                    <td>{{ property.pr_address}} </td>
+                                    <td colspan="2"> {{property.pr_master.cln_master.msp_name}}, {{ property.pr_master.cln_master.msp_address }}</td> 
+                                    <td>{{ property.pr_rent }}</td>
+                                    <td>{{ property.pr_deposite }}</td>
+                                    <td>{{ property.pr_description }}</td>
+                                    <td>{% if property.pr_is_allocated == True %}
+                                    <div class="dropdown">
+                                    <a class="dropdownlink" data-id="{{property.pr_master.id}}"  >Options <i class='icon-angle-down'></i></a>
+                                    <div class="dropdown-content">
+                                    <a data-pid='{{property.pr_master.id}}' data-toggle="tooltip" title="Deallocate Tenant to Property" class="deallocate_tenant"> Deallocate </a>
+                                    <a> Details </a>
+                                    <a> Add Rent Details </a>
+                                    <a> Edit Agreement </a>
+                                    </div>
+                                    </div>
+                                    {% else %}  <a class="allocate_tenant" data-toggle="tooltip" title="Allocate Tenant to Property" data-pid="{{property.pr_master.id}}" >Allocate <i class='icon-angle-right'></i></a></i> {% endif %}</td>
+                                    
+                                </tr>
+                             
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                      
+                       
+                   
+                  </div>
+                  <!-- Other tbs ends -->
+                  {% endfor %}
+                </div>
+               
+                <!-- end tab -->
+                {% else %}
+               <strong> You have no property allocated.Please contact Admin.</strong>
+                {% endif %} 
+                 
+            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

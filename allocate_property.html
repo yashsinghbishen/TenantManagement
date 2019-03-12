@@ -1,0 +1,92 @@
+{% extends 'TM_template/Agent/Base.html' %}
+{% load staticfiles %}
+{% block titleblock %}
+Agent List
+{% endblock %}
+{% block bodyblock %}
+<section id="inner-headline">
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <div class="inner-heading">
+          <ul class="breadcrumb">
+            <li><a href="{% url 'adminhome' %}"><i class="icon-home"></i> Home</a> <i class="icon-angle-right"></i></li>
+            <li class="active">Property</li>
+          </ul>
+          <h2>Property</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="container">
+  <div class="container">
+    <div class="row">
+      <div style="background-image: url('images/bg-01.jpg');">
+        <div>
+          <form method="POST" enctype="multipart/form-data" action="{% url 'allocate_property' %}" class="contactForm">
+            {% csrf_token %}
+            <input type="hidden" name="page" value="{{ page }}" />
+            {% if pobj %}
+            <input type="hidden" name="pselect" value="{{ pobj.property_id }}" />
+             <label> Address :</label> <input type="text" id="pr_address"
+              value="{{ pobj.pr_address }} {{ pobj.msp_name }} {{ pobj.msp_address }}" disabled /></br><br />
+            
+            {% elif plist %}
+            <label> Property:</label><select style="width:75%;" required name="pselect">
+              <option value="" selected>Select Property</option>
+              {% for p in plist %}
+              <option value={{p.vs_property}}>{{ p.vs_property.pr_address }} {{ p.vs_property.pr_master.cln_master.msp_name }} {{ p.vs_property.pr_master.cln_master.msp_address }}</option>
+              {% endfor %}
+            </select><br /><br />
+            {% else %}
+            <label>
+            You have no unallocated visited proeprty for selected tenant</label>
+            {% endif %}
+
+            {% if Tenant_list %}
+            <label>
+            Select Tenant:</label><select style="width:75%;" name="tselect">
+              <option value="" selected>Select Tenant</option>
+              {% for tenant in Tenant_list %}
+              <option value={{tenant.id}}>{{tenant.tn_name}}</option>
+              {% endfor %}
+            </select><br /><br />
+            
+            {% elif ten %}
+            <input type="hidden" name="tselect" value="{{ ten.id }}" />
+           <label> Tenant :</label> <input type="text" id="tenant" value="{{ ten.tn_name }}" name="tselect" disabled /></br><br />
+     
+            {% else %}
+            <label>
+            You have no tenants to allocate property. Either all tenants are allocated or you have not registered any.</label>
+            {% endif %}
+            <label>
+            Start Date of agreement :</label><input type="date" id="a_s_date" name='start_agreement_date'/>
+            <br/><br/>
+            <label>
+            End Date of agreement :</label><input type="date" id='a_e_date' name='end_agreement_date'/>
+            <br/><br/>
+            <label>
+            Property Acceptance Letter :</label>
+            <input type="file" name='pa_agreement_letter'/>
+            <br/><br/>
+            <label>
+            Tanancy Agreement :</label>
+            <input type="file" placeholder="Uplode Image" name='tenancy_agreement'/>
+            <br/><br/>
+            <label>
+            Final Rent :</label>
+            <input type="text" class="decimal_input" name="final_rent"/><br/><br/>
+
+
+
+            <button type="submit" class="btn btn-rounded btn-theme" id="allocatebtn">Allocate</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

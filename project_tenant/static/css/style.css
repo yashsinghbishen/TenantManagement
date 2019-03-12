@@ -182,7 +182,8 @@ header {
   background: #fff;
   margin: 0;
   padding: 0 0 20px;
-  position: relative;
+  /* position: relative; */
+  position: inherit;
   z-index: 2000;
   -webkit-box-shadow: 0 2px 4px -2px #ddd;
   -moz-box-shadow: 0 2px 4px -2px #ddd;

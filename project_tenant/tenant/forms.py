@@ -7,20 +7,20 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 Doc_Choice = [(0, "Select"), (1, "Adhar Card"), (2, "Driving Licence"),
               (3, "Passport"), (4, "Election Card"), (5, "Pan Card"), ]
-Status = [(-1, "Select Status"), (1, "Visit"), (2, "Deal Accepted aggrement under process"),
-          (3, "Property handovered"), (4, "Ex-Tenant")]
+# Status = [(-1, "Select Status"), (1, "Visit"), (2, "Deal Accepted aggrement under process"),
+#           (3, "Property handovered"), (4, "Ex-Tenant")]
 
 
 class TenantRegistratonForm(ModelForm):
     class Meta:
         model = TblTenant
-        exclude = ('tn_agent', 'tn_is_active','tn_joining_date')
+        exclude = ('tn_agent', 'tn_is_active','tn_joining_date','tn_status',)
         
     tn_name = forms.CharField(
         max_length=25, help_text="Enter Tenant's Name:", required=True)
     tn_contact = forms.CharField(
         max_length=10, help_text="Enter Tenant's Contact No:", required=True)
-    tn_permanent_address = forms.CharField(widget=forms.Textarea(attrs={'height': 20}), max_length=225, help_text="Tenant's Permenent address:")
+    tn_permanent_address = forms.CharField(widget=forms.Textarea(attrs={'width': "100%",'cols' : "80",'rows':"2"}), max_length=225, help_text="Tenant's Permenent address:")
     tn_profile = forms.ImageField(
         help_text='Upload Tenant\'s Picture here:', max_length=200, required=False)
     tn_document_description = forms.IntegerField(
@@ -29,10 +29,10 @@ class TenantRegistratonForm(ModelForm):
     tn_document = forms.ImageField(help_text='Upload Document:', required=True)
     tn_reference_name = forms.CharField(
         help_text='Reference Name:', max_length=25, required=True)
-    tn_reference_address = forms.CharField(widget=forms.Textarea(),help_text='Reference Address:', max_length=255)
-    tn_status = forms.IntegerField(
-        help_text='Tenant Status:', widget=forms.Select(choices=Status))
-    tn_agent = forms.CharField(widget=forms.HiddenInput(), required=True)
+    tn_reference_address = forms.CharField(widget=forms.Textarea(attrs={'width': "100%",'cols' : "80",'rows':"2"}),help_text='Reference Address:', max_length=255)
+    # tn_status = forms.IntegerField(
+    #     help_text='Tenant Status:', widget=forms.Select(choices=Status))
+    tn_agent = forms.CharField(widget=forms.HiddenInput(),required=False)
     # tn_joining_date = forms.DateField(widget=forms.SelectDateWidget(),help_text="Select Joinning Date:",input_formats='%d/%m/%Y')        
     # tn_joining_date = forms.DateField(help_text='Date of Join:')
     tn_is_active = forms.HiddenInput()
@@ -60,8 +60,8 @@ class AgentForm(ModelForm):
     email=forms.EmailField(help_text="Enter Email id:")
     # date_joined=forms.DateField(help_text='Date of Join:')
     ag_contact=forms.CharField(help_text="Enter your Contact No:")
-    ag_local_address=forms.CharField(widget=forms.Textarea(), max_length=225,help_text="Enter Local Address:")
-    ag_permanent_address=forms.CharField(widget=forms.Textarea(), max_length=225,help_text="Enter Permenent Address:")
+    ag_local_address=forms.CharField(widget=forms.Textarea(attrs={'width': "100%",'cols' : "80",'rows':"2"}), max_length=225,help_text="Enter Local Address:")
+    ag_permanent_address=forms.CharField(widget=forms.Textarea(attrs={'width': "100%",'cols' : "80",'rows':"2"}), max_length=225,help_text="Enter Permenent Address:")
     ag_profile_image=forms.ImageField(help_text='Upload Profile Picture here:', max_length=200, required=False)
 
 

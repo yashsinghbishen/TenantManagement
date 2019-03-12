@@ -1,0 +1,56 @@
+{% extends 'TM_template/Agent/Base.html' %}
+{% load staticfiles %}
+{% block titleblock %}
+Add Tenent
+{% endblock %}
+{% block link %}
+
+<link href="{% static "css/datepickercss.css" %}" rel="stylesheet" />
+{% endblock %}
+{% block bodyblock %}
+<section id="inner-headline">
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <div class="inner-heading">
+          <ul class="breadcrumb">
+            <li><a href="{% url 'index' %}">Home</a> <i class="icon-angle-right"></i></li>
+            <li class="active">Add Tenant</li>
+          </ul>
+          <h2>Add Tenant</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="container">
+  <div class="container">
+    <div class="row">
+      <div class="span8">
+        <form action="addTenant" method="post" enctype="multipart/form-data" role="form" class="contactForm">
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+          {{hidden.errors}}
+          {% endfor %}
+          {% for field in form.visible_fields %}
+          {{ field.errors }}
+          {{ field.help_text }}
+          {{ field }} <br /><br/>
+          {% endfor %}
+          Joining Date:
+<input type="date" name="date_joined" id="datenew" />
+<br/></br/>
+          <button class="btn btn-success btn-medium" type="submit" value="Submit" />Add Tenant</button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/datepickerjs.js' %}"></script>
+{% endblock %}

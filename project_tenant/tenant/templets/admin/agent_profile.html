@@ -82,7 +82,28 @@
                                     <td style="padding:20px;"><b>Joinning Date:</b></td>
                                     <td style="padding:20px;">{{ agent.date_joined }}</td>
                                 </tr>
-                                {% if  not agent.is_active  and not agent.is_staff  %}
+                               {% if not agent.is_superuser  and agent.is_staff %}
+                                    {% if agent.is_active %} 
+                                        <tr style="padding:20px;">
+                                            <td style="padding:20px;"><b>Status:</b></td>
+                                            <td style="padding:20px;" id="td{{agent.id}}">Active</td>
+                                        </tr>
+                                        
+                                    {% else %} 
+                                        <tr style="padding:20px;">
+                                            <td style="padding:20px;"><b>Status:</b></td>
+                                            <td style="padding:20px;" id="td{{agent.id}}">Retired</td>
+                                        </tr>
+                                        {% comment %} <tr>
+                                            <td id="td{{agent.id}}" >Retired</td>
+                                            <td colspan='2' align="center"><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" value="Activate"></td>
+                                        </tr> {% endcomment %}
+                                    {% endif %}
+                                {% endif %}
+                            </table>
+                           
+
+                                    {% if  not agent.is_active  and not agent.is_staff  %}
                                     <tr style="padding:20px;">
                                         <td style="padding:20px;">
                                             <form method="POST" action="{% url 'admin_agent_request_accept' %}">
@@ -100,78 +121,71 @@
                                         </td>
 
                                     </tr>
-                                {% elif not agent.is_superuser  and agent.is_staff %}
-                                    {% if agent.is_active %} 
-                                        <tr style="padding:20px;">
-                                            <td style="padding:20px;"><b>Status:</b></td>
-                                            <td style="padding:20px;" id="td{{agent.id}}">Active</td>
-                                        </tr>
-                                        
-                                    {% else %} 
-                                        <tr style="padding:20px;">
-                                            <td style="padding:20px;"><b>Status:</b></td>
-                                            <td style="padding:20px;" id="td{{agent.id}}">Retired</td>
-                                        </tr>
-                                        <tr>
-                                            {% comment %} <td id="td{{agent.id}}" >Retired</td> {% endcomment %}
-                                            <td colspan='2' align="center"><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" value="Activate"></td>
-                                        </tr>
                                     {% endif %}
-                                {% endif %}
-                            </table>
-                            <h2 style="align:center">Allocation details</h2>
-                            <section id="container">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="span11">
+                                    {% if not agent.is_superuser  and agent.is_staff %}
+                                     <h2 style="align:center">Allocation details</h2>
+                                    <section id="container">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="span11">
 
-                                            <div style="background-image: url('images/bg-01.jpg');">
-                                                <div>
+                                                    <div style="background-image: url('images/bg-01.jpg');">
+                                                        <div>
 
-                                                    {% if allocations %}
-                                                    <table class="table">
-                                                        <tr class="success">
-                                                            <th>Clone Name</th>
-                                                            <th>Master Property</th>
-                                                            <th>No of properties</th>
-                                                            <th>Alloacted properties</th>
-                                                            <th>Unallocated properties</th>
-                                                        </tr>
-
-                                                        {% for allocation in allocations %}
-                                                            <tr>
-                                                                <td>{{ allocation.al_master.cln_alias}} </td>
-                                                                <td>{{ allocation.al_master.cln_master.msp_name }}</td>
-                                                                <td>{{ allocation.properties }}   <a class="show_data_agent" data-id="{{allocation.al_master.id}}" data-hidden="1" data-act="all_properties"><i class="icon-angle-down"></i></a></td>
-                                                                <td>{{ allocation.allocated}}   <a class="show_data_agent" data-id="{{allocation.al_master.id}}" data-hidden="1" data-act="allocated_properties"><i class="icon-angle-down"></i></a></td>
-                                                                <td>{{ allocation.unallocated }}  <a class="show_data_agent" data-id="{{allocation.al_master.id}}" data-hidden="1" data-act="unallocated_properties"><i class="icon-angle-down"></i></a> </td>
-                                                            </tr>
-                                                            {% autoescape off %}
-                                                                <tr class="accordion-body collapse hidden" style="height: max-content;">
-                                                                    <td colaspan = 9>
-                                                                    aaya
-                                                                    </td>
+                                                            {% if allocations %}
+                                                            <table class="table">
+                                                                <tr class="success">
+                                                                    <th>Clone Name</th>
+                                                                    <th>Master Property</th>
+                                                                    <th>No of properties</th>
+                                                                    <th>Alloacted properties</th>
+                                                                    <th>Unallocated properties</th>
                                                                 </tr>
-                                                            {% endautoescape %}
 
-                                                        {% endfor %}
+                                                                {% for allocation in allocations %}
+                                                                    <tr>
+                                                                        <td>{{ allocation.al_master.cln_alias}} </td>
+                                                                        <td>{{ allocation.al_master.cln_master.msp_name }}</td>
+                                                                        <td>{{ allocation.properties }}   <a class="show_data_agent" data-id="{{allocation.al_master.id}}" data-hidden="1" data-act="all_properties"><i class="icon-angle-down"></i></a></td>
+                                                                        <td>{{ allocation.allocated}}   <a class="show_data_agent" data-id="{{allocation.al_master.id}}" data-hidden="1" data-act="allocated_properties"><i class="icon-angle-down"></i></a></td>
+                                                                        <td>{{ allocation.unallocated }}  <a class="show_data_agent" data-id="{{allocation.al_master.id}}" data-hidden="1" data-act="unallocated_properties"><i class="icon-angle-down"></i></a> </td>
+                                                                    </tr>
+                                                                    {% autoescape off %}
+                                                                        <tr class="accordion-body collapse hidden" style="height: max-content;">
+                                                                            <td colaspan = 9>
+                                                                            aaya
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endautoescape %}
+
+                                                                {% endfor %}
+                                                                </div>
+                                                            </table>
+                                                            
+                                                            {% else %}
+                                                            <strong>No Allocation Record Found..</strong>
+                                                            {% endif %}
                                                         </div>
-                                                    </table>
-                                                    
-                                                    {% else %}
-                                                    <strong>No Allocation Record Found..</strong>
-                                                    {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </section>
-
+                                    </section>
+                                    {% if agent.is_active %} 
                                         <tr>
                                             {% comment %} <td id="td{{agent.id}}">Active</td> {% endcomment %}
-                                            <td colspan='2' align="center"><input type="button" class="agent-act btn-danger btn-rounded" data-id="{{ agent.id }}" data-act="0" value="Retire"></td> 
+                                            <td colspan='2' align="center"><input type="button" class="agent-act btn-danger btn-rounded" data-id="{{ agent.id }}" data-act="0" data-view="view" value="Retire"></td> 
+                                        </tr>                             
+                                    {% else %} 
+                                        
+                                        <tr>
+                                            {% comment %} <td id="td{{agent.id}}" >Retired</td> {% endcomment %}
+                                            <td colspan='2' align="center"><input type="button" class="agent-act btn-success btn-rounded" data-id="{{ agent.id }}" data-act="1" data-view="view" value="Activate"></td>
                                         </tr>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                      
                             {% else %}
                             <strong>Profile not found .</strong>
                             {% endif %}
