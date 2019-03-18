@@ -419,6 +419,11 @@ $('.delete_clone').live('click', function () {
     })
 });
 
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    $('#move_to').select2('destroy')
+  });
+
 $('.allocate_clone').live('click', function () {
     var msp = $(this).attr('data-msp');
     var cln = $(this).attr('data-id');
@@ -786,4 +791,24 @@ $('#selected_tenant').live('change', function () {
         $('#id_tn_document').removeAttr('required')
         $('#id_tn_profile').removeAttr('required')
     })
+});
+
+
+// Searching in Agent request on search textbox
+$('.search_tenant').live('keyup',function () {
+    var status=$(this).attr('data-status'); 
+    var query;
+    query = $(this).val();
+    $.get('/agent/tenant_search_list/', { suggestion: query,status: status }, function (data) {
+       if(status == "all"){
+            $('#tbl_tenants').html(data);   
+        }
+        if (status == "active") {
+            $('#tbl_active_tenants').html(data);   
+        } 
+        if (status == "inactive") {
+            $('#tbl_inactive_tenants').html(data);   
+        }
+           
+    });
 });

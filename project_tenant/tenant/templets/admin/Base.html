@@ -37,7 +37,7 @@
     <style>
         .fixed_header tbody {
             display: block;
-            max-height: 200px;
+            max-height: 400px;
             overflow-y: scroll;
             border-collapse: collapse;
 
@@ -51,6 +51,25 @@
             table-layout: fixed;
         } 
         .fixed_header td{
+            word-wrap:break-word;
+        }
+
+        .fixed_header2 tbody {
+        display: block;
+        max-height: 200px;
+        overflow-y: scroll;
+        border-collapse: collapse;
+
+        }
+
+        .fixed_header2 thead,
+        tbody tr {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        } 
+        .fixed_header2 td{
             word-wrap:break-word;
         }
 
@@ -199,19 +218,19 @@
         <!-- end header -->
 {% block bodyblock %}
 {% endblock %}
-        <footer>
+       <footer>
             <div class="container">
                 <div class="row">
                     <div class="span4">
                         <div class="widget">
                             <h5 class="widgetheading">Browse pages</h5>
                             <ul class="link-list">
-                                <li><a href="#">Our company</a></li>
-                                <li><a href="#">Terms and conditions</a></li>
-                                <li><a href="#">Privacy policy</a></li>
-                                <li><a href="#">Press release</a></li>
-                                <li><a href="#">What we have done</a></li>
-                                <li><a href="#">Our support forum</a></li>
+                                <li><a href="{% url 'admin_agent_active' %}">Agent View</a></li>
+                                <li><a href="{% url 'admin_view_master_property' %}">Property View</a></li>
+                                <li><a href="{% url 'admin_add_property' %}">Add Property</a></li>
+                                <li><a href="{% url 'admin_add_master_property' %}">Add Master Property</a></li>
+                                <li><a href="{% url 'admin_manage_clones' %}">Manage Property</a></li>
+                                
                             </ul>
 
                         </div>
@@ -220,9 +239,9 @@
                         <div class="widget">
                             <h5 class="widgetheading">Get in touch</h5>
                             <address>
-                                <strong>Eterna company Inc.</strong><br>
-                                Somestreet 200 VW, Suite Village A.001<br>
-                                Jakarta 13426 Indonesia
+                                <strong>Example Example</strong><br>
+                                Example Example<br>
+                                Example Example
                             </address>
                             <p>
                                 <i class="icon-phone"></i> (123) 456-7890 - (123) 555-7891 <br>
@@ -230,10 +249,14 @@
                             </p>
                         </div>
                     </div>
-                  
+                    <div class="span4">
+    
+                      <iframe width="100%" height="300" src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;coord=21.195498297291348,72.79268457088621&amp;q=Surat%2CGujarat%2CIndia+(My%20BuTenant%20Management%20App)&amp;ie=UTF8&amp;t=&amp;z=12&amp;iwloc=B&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a href="https://www.maps.ie/map-my-route/">Create route map</a></iframe>
+                   
+                    </div>
                 </div>
             </div>
-           
+
         </footer>
     </div>
     <a href="#" class="scrollup"><i class="icon-angle-up icon-square icon-bglight icon-2x active"></i></a>

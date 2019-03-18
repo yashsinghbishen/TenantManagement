@@ -33,7 +33,7 @@
                             </br>
                             Clone : <strong>{{cln.cln_alias}}</strong><input type="hidden" name="pr_msp_clone" value="{{cln.id}}" ></br>
                             {% else %}
-                            <select name="pr_msp" required class="form-data" id="msp_list" data-unallocated='1' placeholder="new hint" required>
+                            <select name="pr_msp" required style='width:75%' class="form-data" id="msp_list" data-unallocated='1' placeholder="new hint" required>
                                 <option value="">Select Master Property</option>
                                 {% for item in obj_msp %}
                                 <option  value={{item.id}}> {{item.msp_name}} {{item.msp_address}}</option>
@@ -47,13 +47,14 @@
                             {% if agent %}
                                 Agent : <strong>{{agent.first_name}} {{agent.last_name}}</strong><input type="hidden" name="agentx" value="{{agent.id}}" ></br>
                             {% else %}
+                            <br/>
                                 Agent:
-                                <select name="agentx" id="selectedagent" required >
+                                <select name="agentx" id="selectedagent" style='width:75%' required >
                                     <option selected="selected" value="" >Select Agent</option>
                                     {% for item in obj_agent %}
                                     <option  value={{item.id}}>{{item.first_name}} {{item.last_name}}</option>
                                     {% endfor %}
-                                </select><br />
+                                </select><br /><br/>
                             {% endif %}
                            
                             <input type="submit" id="btnsuccess" class='btn btn-success btn-rounded' value="Allocate this Property"/>

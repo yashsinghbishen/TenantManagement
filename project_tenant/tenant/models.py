@@ -95,7 +95,7 @@ class TblTenant(models.Model):
 # Master Property Table
 class TblMasterProperty(models.Model):
     # Name of property
-    msp_name = models.CharField(max_length=30, default='My Property')
+    msp_name = models.CharField(max_length=100, default='My Property')
     # address of property
     msp_address = models.CharField(max_length=255, default='My Property')
     # description of property
@@ -122,7 +122,7 @@ class TblMasterProperty(models.Model):
 # Creating master property clone for multiple Allocation
 class TblMasterPropertyClone(models.Model):
     # Alias Name for the Clone property
-    cln_alias = models.CharField(max_length=30,)
+    cln_alias = models.CharField(max_length=100,)
     # Master property Reference
     cln_master = models.ForeignKey(TblMasterProperty, on_delete=models.CASCADE)
     # Check for Master Clone
@@ -158,24 +158,27 @@ class TblProperty(models.Model):
 
 
 # View of master property
-class ViewMasterProperties(models.Model):
-    id = models.BigIntegerField(primary_key=True)
-    msp_name = models.CharField(max_length=30, default='My Property')
-    msp_address = models.CharField(max_length=255)
-    msp_description= models.CharField(max_length=255)
-    msp_is_active = models.BooleanField(default=True)
-    no_of_clones = models.BigIntegerField()
-    allocated_clones = models.BigIntegerField()
-    unallocated_clones = models.BigIntegerField()
-    no_of_property = models.BigIntegerField()
-    allocated_properties = models.BigIntegerField()
-    unallocated_properties = models.BigIntegerField()
+# class ViewMasterProperties(models.Model):
+#     id = models.BigIntegerField(primary_key=True)
+#     msp_name = models.CharField(max_length=100, default='My Property')
+#     msp_address = models.CharField(max_length=255)
+#     msp_description= models.CharField(max_length=255)
+#     msp_is_active = models.BooleanField(default=True)
+#     no_of_clones = models.BigIntegerField()
+#     allocated_clones = models.BigIntegerField()
+#     unallocated_clones = models.BigIntegerField()
+#     no_of_property = models.BigIntegerField()
+#     allocated_properties = models.BigIntegerField()
+#     unallocated_properties = models.BigIntegerField()
 
-    class Meta:
-        db_table = 'view_master_properties'
-        managed = False
-        verbose_name = 'Master Property '
-        verbose_name_plural = 'Master Properties'
+#     class Meta:
+#         db_table = 'view_master_properties'
+#         managed = False
+#         verbose_name = 'Master Property '
+#         verbose_name_plural = 'Master Properties'
+
+
+        
 
 
 # Visit Table
@@ -215,26 +218,6 @@ class TblAgentAllocation(models.Model):
         return self.al_agent.username
 
 
-# Rent Collection Table
-class TblRentAllocation(models.Model):
-    # Property reference
-    rc_property = models.ForeignKey(TblProperty,
-                                    on_delete=models.CASCADE)
-    # identification number on physical copy
-    rc_recipt_no = models.IntegerField()
-    # month for whixh rent is collected
-    rc_month = models.IntegerField(default=1, null=False)
-    # year for rent is collected
-    rc_year = models.ImageField(max_length=4, null=False)
-    # date when the rent is collected
-    rc_pay_off_date = models.DateField(null=False)
-
-    class Meta:
-        verbose_name_plural = 'Rent Collection Details'
-
-    def __str__(self):
-        return self.rc_property.pr_address
-
 
 # Property Allocation Table
 # @deconstructible
@@ -267,6 +250,26 @@ class TblPropertyAllocation(models.Model):
     def __str__(self):
         return self.pa_property.pr_address
 
+
+# Rent Collection Table
+class TblRentCollection(models.Model):
+    # Property reference
+    rc_allocation = models.ForeignKey(TblPropertyAllocation,
+                                    on_delete=models.CASCADE)
+    # identification number on physical copy
+    rc_recipt_no = models.IntegerField()
+    # month for whixh rent is collected
+    rc_month = models.IntegerField(default=1, null=False)
+    # year for rent is collected
+    rc_year = models.ImageField(max_length=4, null=False)
+    # date when the rent is collected
+    rc_pay_off_date = models.DateField(null=False)
+
+    class Meta:
+        verbose_name_plural = 'Rent Collection Details'
+
+    def __str__(self):
+        return self.rc_property.pr_address
 
 
 # msp_name yash

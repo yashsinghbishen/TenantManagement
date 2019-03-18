@@ -84,7 +84,7 @@ Agent List
                                     <th colspan="2">Address</th>
                                     <th>Rent</th>
                                     <th>Deposite</th>
-                                    <th>Description</th>
+                                    <th colspan="2">Description</th>
                                     <th>Status</th>
                                   
                                 </tr>
@@ -98,7 +98,7 @@ Agent List
                                     <td colspan="2"> {{property.pr_master.cln_master.msp_name}}, {{ property.pr_master.cln_master.msp_address }}</td>
                                     <td>{{ property.pr_rent }}</td>
                                     <td>{{ property.pr_deposite }}</td>
-                                    <td>{{ property.pr_description }}</td>
+                                    <td colspan="2">{{ property.pr_description }}</td>
 
                                     <td>{% if property.pr_is_allocated == True %}
                                     <div class="dropdown">
@@ -133,7 +133,7 @@ Agent List
                                     <th colspan="2">Address</th>
                                     <th>Rent</th>
                                     <th>Deposite</th>
-                                    <th>Description</th>
+                                    <th colspan="2">Description</th>
                                     <th>Status</th>
                                    
                                 </tr>
@@ -146,7 +146,7 @@ Agent List
                                     <td colspan="2"> {{property.pr_master.cln_master.msp_name}}, {{ property.pr_master.cln_master.msp_address }}</td> 
                                     <td>{{ property.pr_rent }}</td>
                                     <td>{{ property.pr_deposite }}</td>
-                                    <td>{{ property.pr_description }}</td>
+                                    <td colspan="2">{{ property.pr_description }}</td>
                                     <td>{% if property.pr_is_allocated == True %}
                                     <div class="dropdown">
                                     <a class="dropdownlink" data-id="{{property.pr_master.id}}"  >Options <i class='icon-angle-down'></i></a>

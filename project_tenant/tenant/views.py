@@ -21,10 +21,10 @@ from tenant.models import (TblAgent,
                            TblMasterPropertyClone,
                            TblProperty,
                            TblPropertyAllocation,
-                           TblRentAllocation,
+                           TblRentCollection,
                            TblTenant,
-                           TblVisit,
-                           ViewMasterProperties)
+                           TblVisit
+                           )
 
 from django.db.models import (Prefetch,
                               Count,
@@ -39,6 +39,7 @@ from django.db.models import (Prefetch,
                               Value
                               )
 from django.db.models.functions import Cast, Concat
+
 # Create your views here.
 
 
@@ -133,7 +134,7 @@ def do_login(request):
 def admin_index(request):
     return render(request, 'admin/base.html')
 
-# -Page Agent Requests..................................................................................................
+# Page Agent Requests..................................................................................................
 # view all agent requests on admin site
 @for_admin
 def view_agent_request(request):
@@ -220,7 +221,7 @@ def agent_requests_search(request):
 # End-Page Agent Requests...........................................................................................
 
 
-# -Page Agent View..................................................................................................
+# Page Agent View..................................................................................................
 # view all agent requests on admin site
 @for_admin
 def view_agent_all(request):
@@ -231,6 +232,7 @@ def view_agent_all(request):
 
     except Exception as e:
         agents = None
+        print('Error at Agent Profile',e)
     return render(request, 'admin/agent_active.html',
                   {'agents': agents})
 
@@ -309,7 +311,7 @@ def agent_active_search(request):
 # End-Page Agent View..................................................................................................
 
 
-# -Page Agent profile View.......................................................................................
+# Page Agent profile View.......................................................................................
 # Viewing the agent request in more detailed View
 @for_admin
 def agent_profile(request):
@@ -400,7 +402,7 @@ def show_data_agent(request):
 # End-Page Agent View..................................................................................................
 
 
-# -Page Add Master Property View.......................................................................................
+# Page Add Master Property View.......................................................................................
 # Creating Clone Input boxes according to user input
 def create_clone_list(request):
     no = request.GET['clone_no']
@@ -450,7 +452,7 @@ def add_master_property(request):
         return render(request, 'admin/add_master_property.html')
 # End-Page Add master property View.................................................................................
 
-# -Page Add Poperty View............................................................................................
+# Page Add Poperty View............................................................................................
 # Showing clone list of selected property
 @for_admin
 def clone_list(request):
@@ -467,7 +469,35 @@ def clone_list(request):
 # Viewing master property at admin side
 @for_admin
 def view_master_property(request):
-    msp_list = ViewMasterProperties.objects.all()
+    msp_list = TblMasterProperty.objects.all()\
+        .annotate(
+            no_of_clones=Count('tblmasterpropertyclone',
+            distinct=True))\
+        .annotate(
+            unallocated_clones=Count(
+                'tblmasterpropertyclone',distinct=True,
+                filter=Q(
+                    tblmasterpropertyclone__cln_is_allocated=False)))\
+        .annotate(
+            allocated_clones=Count(
+                'tblmasterpropertyclone',distinct=True,
+                filter=Q(
+                    tblmasterpropertyclone__cln_is_allocated=True)))\
+        .annotate(
+            no_of_property=Count(
+                'tblmasterpropertyclone__tblproperty'))\
+        .annotate(
+            unallocated_properties=Count(
+                'tblmasterpropertyclone__tblproperty',
+                filter=Q(
+                    tblmasterpropertyclone__tblproperty__pr_is_allocated=False)))\
+        .annotate(
+            allocated_properties=Count(
+                'tblmasterpropertyclone__tblproperty',
+                filter=Q(
+                    tblmasterpropertyclone__tblproperty__pr_is_allocated=True)))
+    
+    # msp_list = ViewMasterProperties.objects.all()
     return render(request, 'admin/master_property_view.html',
                   {'master_property_list': msp_list})
 
@@ -546,7 +576,7 @@ def add_property(request):
                   {'address_list': address_list})
 # End-Page Add property View.................................................................................
 
-# -Page View MAster Property.................................................................................
+# Page View MAster Property.................................................................................
 # showing data on admin page
 @for_admin
 def show_data(request):
@@ -802,7 +832,7 @@ def property_soldout(request):
 
 # End-Page View master property .................................................................................
 
-# -Page Add Create Clone View....................................................................................
+# Page Add Create Clone View....................................................................................
 # creating new clone
 @for_admin
 def create_clone(request):
@@ -829,7 +859,7 @@ def create_clone(request):
 
 # End-Page Add Create Clone View..................................................................................
 
-# -Page manage Clone View.........................................................................................
+# Page manage Clone View.........................................................................................
 # Moving property from one clone to another
 @for_admin
 def manage_clones(request):
@@ -881,7 +911,7 @@ def move_to_clone_list(request):
     clones = TblMasterPropertyClone.objects.filter(
         cln_master=request.GET['msp']).order_by('id')
     response = """move in clone:
-                <select name="to_clone" class="form-data"
+                <select style="width:50%;" name="to_clone" class="form-data"
                  id="to_clone" placeholder="new hint">
                  <option value="" selected="selected">
                  Select Clone</option>
@@ -900,7 +930,7 @@ def move_from_clone_list(request):
         .filter(cln_master=request.GET['msp'])\
         .exclude(id=request.GET['cln']).order_by('id')
     response = """move from clone:
-                <select name="from_clone" class="form-data"
+                <select style="width:50%;" name="from_clone" class="form-data"
                  id="from_clone" placeholder="new hint">
                  <option value="" selected="selected">
                  Select Clone</option>
@@ -945,7 +975,7 @@ def view_tenants(request):
     #             .values('pa_property__pr_address')
     #         )
     # )
-    tenantlist = TblTenant.objects.filter(tn_is_active=True)\
+    tenantlist = TblTenant.objects.all()\
         .annotate(
             pr_address=Subquery(
                 TblPropertyAllocation.objects.filter(
@@ -1166,7 +1196,6 @@ def TenantDetails(request, tid):
 #         print("\n\nErorr:----------->", e)
 #     return view_tenants(request)
 
-
 @for_staff
 def tenant_search_result(request):
     tenantlist = []
@@ -1174,28 +1203,38 @@ def tenant_search_result(request):
     try:
         if request.method == 'GET':
             if 'suggestion' in request.GET.keys():
+                status = request.GET['status']
                 user = request.user
                 starts_with = request.GET['suggestion']
-                print(user)
-                tenantlist = tenant_search(request, user, starts_with)
+                tenantlist = tenant_search(request, starts_with, status)
             # print("\nTenant list:\n", tenantlist)
     except Exception as e:
         print(e)
-    return render(request, 'agent/tenants.html',
-                  {'tenantlist': tenantlist})
+    return render(request, 'agent/tenants.html', {'tenantlist': tenantlist, 'status': status})
 
 
 @for_staff
-def tenant_search(request, user, suggestion=None):
-    print(user)
+def tenant_search(request, suggestion=None, status="all"):
     tn_list = []
     if suggestion:
-        tn_list = TblTenant.objects.filter(
-            tn_name__istartswith=suggestion, tn_agent=user)
-        # print("\n\n\n", tn_list)
+        if status == 'all':
+            tn_list = TblTenant.objects.filter(
+                tn_name__istartswith=suggestion, tn_agent=request.user)
+        elif status == "active":
+            tn_list = TblTenant.objects.filter(
+                tn_name__istartswith=suggestion, tn_agent=request.user, tn_is_active=True)
+        elif status == "inactive":
+            tn_list = TblTenant.objects.filter(
+                tn_name__istartswith=suggestion, tn_agent=request.user, tn_is_active=False)
     else:
-        tn_list = TblTenant.objects.filter(tn_agent=user)
-        # print("\n\n\n", tn_list)
+        if status == 'all':
+            tn_list = TblTenant.objects.filter(tn_agent=request.user)
+        elif status == 'active':
+            tn_list = TblTenant.objects.filter(
+                tn_agent=request.user, tn_is_active=True)
+        elif status == 'inactive':
+            tn_list = TblTenant.objects.filter(
+                tn_agent=request.user, tn_is_active=False)
     return tn_list
 
 
@@ -1266,25 +1305,25 @@ def allocate_property(request):
         # # print(p)
         # # print(type(p))
         tobj = TblTenant.objects.get(id=request.POST['tselect'])
-        if tobj.tn_status == 2: 
+        if tobj.tn_status == 2:
             for k in request.POST.keys():
-                print(k,"\t",request.POST[k])
+                print(k, "\t", request.POST[k])
             allocation = TblPropertyAllocation.objects\
                 .get(pk=request.POST['pselect'])
             print(type(allocation))
             allocation.pa_agreement_date = request\
-            .POST['start_agreement_date']
+                .POST['start_agreement_date']
             allocation.pa_agreement_end_date = request\
                 .POST['end_agreement_date']
             allocation.pa_acceptance_letter = request\
                 .FILES['pa_agreement_letter']
             allocation.pa_tenancy_agreement = request\
-            .FILES['tenancy_agreement']
-            allocation.pa_tenant.tn_status=3
+                .FILES['tenancy_agreement']
+            allocation.pa_tenant.tn_status = 3
             allocation.pa_tenant.save()
             print(allocation.pa_tenant.tn_status)
             # breakpoint()
-            # allocation.al_property.pr_is_allocated = 
+            # allocation.al_property.pr_is_allocated =
             # allocation.pa_final_rent = request.POST['final_rent'],
             allocation.save()
         else:
@@ -1296,13 +1335,13 @@ def allocate_property(request):
                 allocation = TblPropertyAllocation.objects.create(
                     pa_property=objp,
                     pa_tenant=tobj,
-                    pa_agreement_date=request\
+                    pa_agreement_date=request
                     .POST['start_agreement_date'],
                     pa_agreement_end_date=request
                     .POST['end_agreement_date'],
                     pa_acceptance_letter=request
                     .FILES['pa_agreement_letter'],
-                    pa_tenancy_agreement=request\
+                    pa_tenancy_agreement=request
                     .FILES['tenancy_agreement'],
                     pa_final_rent=request.POST['final_rent'],
                     pa_is_allocated=True)
@@ -1369,24 +1408,24 @@ def get_tenant_visit(request):
                 vs_property__pr_is_allocated=False,
                 vs_property__pr_is_active=True,
                 vs_property__pr_master__in=TblAgentAllocation
-                            .objects.filter(al_agent=request.user)
-                            .values('al_master'),
-            )\
+                .objects.filter(al_agent=request.user)
+                .values('al_master'),
+                )\
         .distinct('vs_property')\
         .order_by('vs_property')
-        # TblVisit.objects.select_related('vs_property')\
-        #         .select_related('vs_property__pr_master')\
-        #         .select_related('vs_property__pr_master__cln_master')\
-        #         .filter(
-        #         vs_tenant=ten,
-        #         vs_property__pr_is_allocated=False,
-        #         vs_property__pr_is_active=True,
-        #         vs_property__pr_master__in=TblAgentAllocation
-        #                     .objects.filter(al_agent=request.user)
-        #                     .values('al_master'),
-        #     )\
-        #         .distinct('vs_property')\
-        #         .order_by('vs_property')
+    # TblVisit.objects.select_related('vs_property')\
+    #         .select_related('vs_property__pr_master')\
+    #         .select_related('vs_property__pr_master__cln_master')\
+    #         .filter(
+    #         vs_tenant=ten,
+    #         vs_property__pr_is_allocated=False,
+    #         vs_property__pr_is_active=True,
+    #         vs_property__pr_master__in=TblAgentAllocation
+    #                     .objects.filter(al_agent=request.user)
+    #                     .values('al_master'),
+    #     )\
+    #         .distinct('vs_property')\
+    #         .order_by('vs_property')
     if visits.first() is not None:
         response = """<option value="" selected="selected">
                     Select Proerty</option>
@@ -1473,9 +1512,8 @@ def add_visit(request):
 def change_status(request):
     if request.method == 'GET':
         for k in request.GET.keys():
-            print(k,"  ",request.GET[k])
-        
-        
+            print(k, "  ", request.GET[k])
+
         try:
             tenant = TblTenant.objects.get(pk=request.GET['id'])
             status = request.GET['status']
@@ -1497,7 +1535,7 @@ def change_status(request):
                     allocation.save()
                 return HttpResponse("1")
             elif status == '2':
-                if request.GET['update']=='true':
+                if request.GET['update'] == 'true':
                     allocation = TblPropertyAllocation.objects.get(
                         pa_tenant=tenant,
                         pa_is_allocated=True,

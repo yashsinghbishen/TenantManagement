@@ -29,23 +29,23 @@ Agent List
             {% csrf_token %}
             <input type="hidden" name="page" value="{{ page }}" />
             {% if pobj %}
-            <input type="hidden" name="pselect" value="{{ pobj.id }}" />
-             <label> Address :</label> <input type="text" id="pr_address"
-              value="{{ pobj.pr_address }} {{ pobj.pr_master.cln_master.msp_name }} {{ pobj.pr_master.cln_master.msp_address }}" disabled /></br><br />
+              <input type="hidden" name="pselect" value="{{ pobj.id }}" />
+              <label> Address :</label> <input type="text" id="pr_address"
+                value="{{ pobj.pr_address }} {{ pobj.pr_master.cln_master.msp_name }} {{ pobj.pr_master.cln_master.msp_address }}" disabled /></br><br />
             {% elif prp %}
-            <input type="hidden" name="pselect" value="{{ prp.id }}" />
-            <label> Property :</label> <input type="text" 
-            value="{{ prp.pa_property.pr_address }}, {{ prp.pa_property.pr_master.cln_master.msp_name }}, {{ prp.pa_property.pr_master.cln_master.msp_address }}" disabled /></br><br />
+              <input type="hidden" name="pselect" value="{{ prp.id }}" />
+              <label> Property :</label> <input type="text" 
+              value="{{ prp.pa_property.pr_address }}, {{ prp.pa_property.pr_master.cln_master.msp_name }}, {{ prp.pa_property.pr_master.cln_master.msp_address }}" disabled /></br><br />
             {% elif plist %}
-            <label> Property:</label><select style="width:75%;" required name="pselect">
-              <option value="" selected>Select Property</option>
-              {% for p in plist %}
-              <option value={{p.vs_property.pk}}>{{ p.vs_property.pr_address }} {{ p.vs_property.pr_master.cln_master.msp_name }} {{ p.vs_property.pr_master.cln_master.msp_address }}</option>
-              {% endfor %}
-            </select><br /><br />
+              <label> Property:</label><select style="width:75%;" required name="pselect">
+                <option value="" selected>Select Property</option>
+                {% for p in plist %}
+                <option value={{p.vs_property.pk}}>{{ p.vs_property.pr_address }} {{ p.vs_property.pr_master.cln_master.msp_name }} {{ p.vs_property.pr_master.cln_master.msp_address }}</option>
+                {% endfor %}
+              </select><br /><br />
             {% else %}
-            <label>
-            You have no unallocated visited proeprty for selected tenant</label>
+              <label>
+              You have no unallocated visited proeprty for selected tenant</label>
             {% endif %}
 
             {% if Tenant_list %}

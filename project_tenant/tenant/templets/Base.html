@@ -141,12 +141,12 @@
                         <div class="widget">
                             <h5 class="widgetheading">Browse pages</h5>
                             <ul class="link-list">
-                                <li><a href="#">Our company</a></li>
-                                <li><a href="#">Terms and conditions</a></li>
-                                <li><a href="#">Privacy policy</a></li>
-                                <li><a href="#">Press release</a></li>
-                                <li><a href="#">What we have done</a></li>
-                                <li><a href="#">Our support forum</a></li>
+                                {% comment %} <li><a href="{% url 'index' %}">Log in</a></li>
+                                <li><a href="{% url 'password_reset_recover' %}">Forgot Password</a></li>
+                               <li><a href="{% url 'addAgent' %}">Apply as Agent</a></li>
+                                <li><a href="{% url 'contactus' %}">Contact Us</a></li> {% endcomment %}
+                                 {% comment %} <li><a href="{% url 'admin_manage_clones' %}">Manage Property</a></li> {% endcomment %}
+                                
                             </ul>
 
                         </div>
@@ -155,9 +155,9 @@
                         <div class="widget">
                             <h5 class="widgetheading">Get in touch</h5>
                             <address>
-                                <strong>Eterna company Inc.</strong><br>
-                                Somestreet 200 VW, Suite Village A.001<br>
-                                Jakarta 13426 Indonesia
+                                <strong>Example Example</strong><br>
+                                Example Example<br>
+                                Example Example
                             </address>
                             <p>
                                 <i class="icon-phone"></i> (123) 456-7890 - (123) 555-7891 <br>
@@ -165,11 +165,16 @@
                             </p>
                         </div>
                     </div>
-                  
+                    <div class="span4">
+    
+                      <iframe width="100%" height="300" src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;coord=21.195498297291348,72.79268457088621&amp;q=Surat%2CGujarat%2CIndia+(My%20BuTenant%20Management%20App)&amp;ie=UTF8&amp;t=&amp;z=12&amp;iwloc=B&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a href="https://www.maps.ie/map-my-route/">Create route map</a></iframe>
+                   
+                    </div>
                 </div>
             </div>
-           
+
         </footer>
+    
     </div>
     <a href="#" class="scrollup"><i class="icon-angle-up icon-square icon-bglight icon-2x active"></i></a>
 

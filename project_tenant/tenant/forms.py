@@ -53,8 +53,8 @@ class AgentForm(ModelForm):
 
 
     username=forms.CharField(max_length=15,help_text="Enter User Name:")
-    password=forms.CharField(widget=forms.PasswordInput(),help_text="Enter your Password:",required=True)
-    password2=forms.CharField(widget=forms.PasswordInput(),help_text="Enter your again Password:",required=True)
+    password=forms.CharField(widget=forms.PasswordInput(attrs={'style': 'width: 728px; height: 30px; padding:4px 20px'}),help_text="Enter your Password:",required=True)
+    password2=forms.CharField(widget=forms.PasswordInput(attrs={'style': 'width: 728px; height: 30px; padding:4px 20px'}),help_text="Enter your again Password:",required=True)
     first_name=forms.CharField(help_text="Enter your First Name:")
     last_name=forms.CharField(help_text="Enter your Last Name:")
     email=forms.EmailField(help_text="Enter Email id:")

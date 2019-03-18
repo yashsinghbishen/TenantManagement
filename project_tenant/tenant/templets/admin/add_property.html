@@ -21,7 +21,7 @@
 <section id="container">
     <div class="container">
         <div class="row">
-            <div class="span11">
+            <div class="span10">
                 <strong style="color: red;"> {% autoescape off %} {{ context }}{% endautoescape %}</strong></br>
                 <strong style="color: green;">{% autoescape off %}{{ success }}{% endautoescape %}</strong>
                 <div style="background-image: url('images/bg-01.jpg');">
@@ -30,7 +30,7 @@
                             id="AddMPForm" onsubmit="return validateForm()">
                             {% csrf_token %}
                             Select Property:
-                            <select name="pr_msp" required class="form-data" id="msp_list" placeholder="new hint" required>
+                            <select name="pr_msp" required class="form-data" id="msp_list" style="width:75%;" placeholder="new hint" required>
                                 <option value="" >Select item</option>
                                 {% for item in address_list %}
                                 <option  value={{item.id}}> {{item.msp_name}} {{item.msp_address}}</option>
@@ -38,7 +38,7 @@
                             </select><br />
                             
                             <div id="property" class="hidden">
-                               
+                               </br>
                             </div>
                             
                             <input name="pr_num" id="num" type="hidden" value="1"/>
