@@ -258,10 +258,10 @@ class TblRentCollection(models.Model):
                                     on_delete=models.CASCADE)
     # identification number on physical copy
     rc_recipt_no = models.IntegerField()
-    # month for whixh rent is collected
-    rc_month = models.IntegerField(default=1, null=False)
     # year for rent is collected
-    rc_year = models.ImageField(max_length=4, null=False)
+    rc_recipt = models.ImageField(upload_to='rent/rent_recipt')
+    # month for whixh rent is collected
+    rc_month = models.DateField(null=False)
     # date when the rent is collected
     rc_pay_off_date = models.DateField(null=False)
 
@@ -271,6 +271,9 @@ class TblRentCollection(models.Model):
     def __str__(self):
         return self.rc_property.pr_address
 
+
+# You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+# Run 'python manage.py migrate' to apply them.
 
 # msp_name yash
 # msp_address singh

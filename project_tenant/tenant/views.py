@@ -948,7 +948,7 @@ def move_from_clone_list(request):
 # agent index view
 @for_staff
 def agent_index(request):
-
+    
     return render(request, 'agent/base.html')
 
 # view all  tenants of agent
@@ -1466,6 +1466,7 @@ def change_tenant_status(request):
 
 @for_staff
 def add_visit(request):
+
     if request.method == 'GET':
         if 'tid' in request.GET.keys():
             # print(request.GET['tid'])
