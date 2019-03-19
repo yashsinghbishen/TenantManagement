@@ -23,6 +23,7 @@ urlpatterns = [
     path('get_tenant_visit/',views.get_tenant_visit,name='tenant_visit_select'),
     path('get_deactivated_tenant/',views.get_deactivated_tenant,name='get_deactivated_tenant'),
     path('activate_tenant/',views.invoke_tenant),
+    path('view_visits/',views.view_visit,name='view_visit'),
  
     
 ]

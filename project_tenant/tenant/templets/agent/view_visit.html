@@ -1,0 +1,196 @@
+{% extends 'agent/Base.html'%}
+{% load staticfiles%}
+{% block titleblock %}View Tenants{% endblock %}
+{% block bodyblock %}
+    <section id="inner-headline">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <div class="inner-heading">
+                        <ul class="breadcrumb">
+                            <li><a href="{% url 'agent_index' %}"><i class="icon-home"></i> Home</a> <i
+                                    class="icon-angle-right"></i></li>
+                            <li class="active">View Visits</li>
+                        </ul>
+                        <h2>View Visits</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="container">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+
+                    <div class="tabs">
+                    <ul class="nav nav-tabs bold">
+                    <li class="active"><a href="#all" data-toggle="tab">All Properties</a></li>
+                        <li class=""><a href="#active" data-toggle="tab">Unavailabe Properties</a></li>
+                        <li class=""><a href="#inactive" data-toggle="tab">Available Properties</a></li>
+                    
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="all">
+                            <div>
+                                <div id="tbl_tenants" class="item ">
+
+                                {% if visits %}
+                                    <table class="table fixed_header">
+                                        <thead>
+                                            <tr class="success">
+                                                <th>Tenant</th>
+                                                <th colspan="2">Address</th>
+                                                <th>Date</th>
+                                                <th>Interest</th>
+                                                <th>Property Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for visit in visits %}
+
+                                                <tr>
+                                                    <td><a data-toggle="tooltip" title="View Details" class='data-tn_name' href="{% url 'TenantDetails' visit.vs_tenant.id %}">{{ visit.vs_tenant.tn_name }}</a></td>
+                                                    
+                                                    <td colspan="2">{{ visit.vs_address }}</td>
+                                                    <td>{{ visit.vs_date}}</td>
+                                                    <td>
+                                                        {% if visit.vs_intrest_status == 1  %}
+                                                            Interested
+                                                        {% elif visit.vs_intrest_status == 2 %}
+                                                            Not Interested
+                                                        {% else %}
+                                                            Potential Visit
+                                                        {% endif %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if visit.vs_property.pr_is_allocated %}
+                                                            Not Available
+                                                        {% else %}
+                                                            Available
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                {% else %}
+
+                                There are No Tenants
+
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="active">
+                         <div>
+                                <div id="tbl_tenants" class="item ">
+
+                                {% if allocated_visits %}
+                                    <table class="table fixed_header">
+                                        <thead>
+                                            <tr class="success">
+                                                <th>Tenant</th>
+                                                <th colspan="2">Address</th>
+                                                <th>Date</th>
+                                                <th>Interest</th>
+                                                <th>Property Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for visit in allocated_visits %}
+
+                                                <tr>
+                                                    <td><a data-toggle="tooltip" title="View Details" class='data-tn_name' href="{% url 'TenantDetails' visit.vs_tenant.id %}">{{ visit.vs_tenant.tn_name }}</a></td>
+                                                    
+                                                    <td colspan="2">{{ visit.vs_address }}</td>
+                                                    <td>{{ visit.vs_date}}</td>
+                                                    <td>
+                                                        {% if visit.vs_intrest_status == 1  %}
+                                                            Interested
+                                                        {% elif visit.vs_intrest_status == 2 %}
+                                                            Not Interested
+                                                        {% else %}
+                                                            Potential Visit
+                                                        {% endif %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if visit.vs_property.pr_is_allocated %}
+                                                            Not Available
+                                                        {% else %}
+                                                            Available
+                                                        {% endif %}
+                                                    </td>
+                                                
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                {% else %}
+
+                                There are No Tenants
+
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="inactive">
+                        <div>
+                            <div id="tbl_tenants" class="item ">
+
+                                {% if unallocated_visits %}
+                                    <table class="table fixed_header">
+                                        <thead>
+                                            <tr class="success">
+                                                <th>Tenant</th>
+                                                <th colspan="2">Address</th>
+                                                <th>Date</th>
+                                                <th>Interest</th>
+                                                <th>Property Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for visit in unallocated_visits %}
+
+                                                <tr>
+                                                    <td><a data-toggle="tooltip" title="View Details" class='data-tn_name' href="{% url 'TenantDetails' visit.vs_tenant.id %}">{{ visit.vs_tenant.tn_name }}</a></td>
+                                                    
+                                                    <td colspan="2">{{ visit.vs_address }}</td>
+                                                    <td>{{ visit.vs_date}}</td>
+                                                    <td>
+                                                        {% if visit.vs_intrest_status == 1  %}
+                                                            Interested
+                                                        {% elif visit.vs_intrest_status == 2 %}
+                                                            Not Interested
+                                                        {% else %}
+                                                            Potential Visit
+                                                        {% endif %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if visit.vs_property.pr_is_allocated %}
+                                                            Not Available
+                                                        {% else %}
+                                                            Available
+                                                        {% endif %}
+                                                    </td>
+                                                
+                                                
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                {% else %}
+
+                                There are No Tenants
+
+                                {% endif %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
