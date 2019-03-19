@@ -23,74 +23,91 @@ Agent List
 <section id="container">
   <div class="container">
     <div class="row">
-      <div style="background-image: url('images/bg-01.jpg');">
-        <div>
-          <form method="POST" enctype="multipart/form-data" action="{% url 'allocate_property' %}" class="contactForm">
-            {% csrf_token %}
-            <input type="hidden" name="page" value="{{ page }}" />
-            {% if pobj %}
-              <input type="hidden" name="pselect" value="{{ pobj.id }}" />
-              <label> Address :</label> <input type="text" id="pr_address"
-                value="{{ pobj.pr_address }} {{ pobj.pr_master.cln_master.msp_name }} {{ pobj.pr_master.cln_master.msp_address }}" disabled /></br><br />
-            {% elif prp %}
-              <input type="hidden" name="pselect" value="{{ prp.id }}" />
-              <label> Property :</label> <input type="text" 
-              value="{{ prp.pa_property.pr_address }}, {{ prp.pa_property.pr_master.cln_master.msp_name }}, {{ prp.pa_property.pr_master.cln_master.msp_address }}" disabled /></br><br />
-            {% elif plist %}
-              <label> Property:</label><select style="width:75%;" required name="pselect">
-                <option value="" selected>Select Property</option>
-                {% for p in plist %}
-                <option value={{p.vs_property.pk}}>{{ p.vs_property.pr_address }} {{ p.vs_property.pr_master.cln_master.msp_name }} {{ p.vs_property.pr_master.cln_master.msp_address }}</option>
-                {% endfor %}
-              </select><br /><br />
-            {% else %}
-              <label>
-              You have no unallocated visited proeprty for selected tenant</label>
-            {% endif %}
+      <div class="span10">
 
-            {% if Tenant_list %}
-            <label>
-            Select Tenant:</label><select style="width:75%;" name="tselect">
-              <option value="" selected>Select Tenant</option>
-              {% for tenant in Tenant_list %}
-              <option value={{tenant.id}}>{{tenant.tn_name}}</option>
-              {% endfor %}
-            </select><br /><br />
-            
-            {% elif ten %}
-            <input type="hidden" name="tselect" value="{{ ten.id }}" />
-           <label> Tenant :</label> <input type="text" id="tenant" value="{{ ten.tn_name }}" name="tselect" disabled /></br><br />
-     
-            {% else %}
-            <label>
-            You have no tenants to allocate property. Either all tenants are allocated or you have not registered any.</label>
-            {% endif %}
-            <label>
-            Start Date of agreement :</label><input type="date" id="a_s_date" name='start_agreement_date'/>
-            <br/><br/>
-            <label>
-            End Date of agreement :</label><input type="date" id='a_e_date' name='end_agreement_date'/>
-            <br/><br/>
-            <label>
-            Property Acceptance Letter :</label>
-            <input type="file" name='pa_agreement_letter'/>
-            <br/><br/>
-            <label>
-            Tanancy Agreement :</label>
-            <input type="file" placeholder="Uplode Image" name='tenancy_agreement'/>
-            <br/><br/>
-            <label>
-            Final Rent :</label>{% if prp %}
-            <input type="text" class="decimal_input" name="final_rent" value="{{prp.pa_final_rent}}" disabled /><br/><br/>
-            {% else %}
-            <input type="text" class="decimal_input" name="final_rent"/><br/><br/>
+          <div style="background-image: url('images/bg-01.jpg');">
+            <div>
+              <form method="POST" enctype="multipart/form-data" action="{% url 'allocate_property' %}" class="contactForm">
+                {% csrf_token %}
+                <input type="hidden" name="page" value="{{ page }}" />
+                {% if pobj %}
+                  <input type="hidden" name="pselect" value="{{ pobj.id }}" />
+                  <label> Address :</label> <input type="text" id="pr_address"
+                    value="{{ pobj.pr_address }} {{ pobj.pr_master.cln_master.msp_name }} {{ pobj.pr_master.cln_master.msp_address }}" disabled /></br><br />
+                {% elif prp %}
+                  <input type="hidden" name="pselect" value="{{ prp.id }}" />
+                  <label> Property :</label> <input type="text" 
+                  value="{{ prp.pa_property.pr_address }}, {{ prp.pa_property.pr_master.cln_master.msp_name }}, {{ prp.pa_property.pr_master.cln_master.msp_address }}" disabled /></br><br />
+                {% elif plist %}
+                  <label> Property:</label><select style="width:75%;" required name="pselect">
+                    <option value="" selected>Select Property</option>
+                    {% for p in plist %}
+                    <option value={{p.vs_property.pk}}>{{ p.vs_property.pr_address }} {{ p.vs_property.pr_master.cln_master.msp_name }} {{ p.vs_property.pr_master.cln_master.msp_address }}</option>
+                    {% endfor %}
+                  </select><br /><br />
+                {% else %}
+                  <label>
+                  You have no unallocated visited proeprty for selected tenant</label>
+                {% endif %}
 
-            {% endif %}
+                {% if Tenant_list %}
+                <label>
+                Select Tenant:</label><select style="width:75%;" name="tselect">
+                  <option value="" selected>Select Tenant</option>
+                  {% for tenant in Tenant_list %}
+                  <option value={{tenant.id}}>{{tenant.tn_name}}</option>
+                  {% endfor %}
+                </select><br /><br />
+                
+                {% elif ten %}
+                <input type="hidden" name="tselect" value="{{ ten.id }}" />
+              <label> Tenant :</label> <input type="text" id="tenant" value="{{ ten.tn_name }}" name="tselect" disabled /></br><br />
+        
+                {% else %}
+                <label>
+                You have no tenants to allocate property. Either all tenants are allocated or you have not registered any.</label>
+                {% endif %}
+                <label>
+                Start Date of agreement :</label><input type="date" style="width:75%;" id="agreement_start_date" name='start_agreement_date'/>
+                <br/><br/>
+                <label>
+                End Date of agreement :</label><input type="date" style="width:75%;" id='agreement_end_date' name='end_agreement_date'/>
+                  <script>
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                            dd='0'+dd
+                        } 
+                        if(mm<10){
+                            mm='0'+mm
+                        } 
+                    mindate = yyyy+'-'+mm+'-'+dd;
+                    document.getElementById("agreement_end_date").setAttribute("min", mindate);
+                  </script>
+                <br/><br/>
+                <label>
+                Property Acceptance Letter :</label>
+                <input type="file" accept="image/gif, image/jpeg, image/png" name='pa_agreement_letter'/>
+                <br/><br/>
+                <label>
+                Tanancy Agreement :</label>
+                <input type="file" placeholder="Uplode Image" accept="image/gif, image/jpeg, image/png" name='tenancy_agreement'/>
+                <br/><br/>
+                <label>
+                Final Rent :</label>{% if prp %}
+                <input type="text" class="decimal_input" name="final_rent" style="width:75%;" value="{{prp.pa_final_rent}}" disabled /><br/><br/>
+                {% else %}
+                <input type="text" class="decimal_input" style="width:75%;" name="final_rent"/><br/><br/>
+
+                {% endif %}
 
 
-            <button type="submit" class="btn btn-rounded btn-theme" id="allocatebtn">Allocate</button>
-          </form>
-        </div>
+                <button type="submit" class="btn btn-rounded btn-theme" id="allocatebtn">Allocate</button>
+              </form>
+            </div>
+          </div>
       </div>
     </div>
   </div>

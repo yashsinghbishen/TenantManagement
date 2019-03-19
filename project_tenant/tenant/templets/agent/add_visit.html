@@ -51,7 +51,21 @@
                     You have empty property.
                     {% endif %}
                     <label>Visit Date : </label>
-                    <input type="date" name="visitdate"/><br><br>
+                    <input type="date" id="visitdate" style="width:75%;" name="visitdate"/>
+                    <script>
+                        var today = new Date();
+                        var dd = today.getDate();
+                        var mm = today.getMonth()+1; //January is 0!
+                        var yyyy = today.getFullYear();
+                        if(dd<10){
+                                dd='0'+dd
+                            } 
+                            if(mm<10){
+                                mm='0'+mm
+                            } 
+                        maxdate = yyyy+'-'+mm+'-'+dd;
+                        document.getElementById("visitdate").setAttribute("max", maxdate);
+                    </script><br><br>
                     <label>Tenant Intrest : </label>
                     <select name='selectedin' style='width:75%' required>
                         <option value="">Select Status</option>

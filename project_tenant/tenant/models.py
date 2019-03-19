@@ -269,7 +269,8 @@ class TblRentCollection(models.Model):
         verbose_name_plural = 'Rent Collection Details'
 
     def __str__(self):
-        return self.rc_property.pr_address
+        return str(self.rc_allocation.id)
+
 
 
 # You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.

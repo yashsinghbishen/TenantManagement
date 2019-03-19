@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'tenant.db',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'password',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -142,6 +142,17 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+DEFAULT_FROM_EMAIL='system.tenant.management@gmail.com'
+
+EMAIL_HOST_USER = 'system.tenant.management@gmail.com'
+EMAIL_HOST_PASSWORD = '123.Admin'
+EMAIL_PORT = 587
+RECOVER_ONLY_ACTIVE_USERS=True
+PASSWORD_RESET_TOKEN_EXPIRES=1
 
 
 # Static files (CSS, JavaScript, Images)

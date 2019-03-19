@@ -23,6 +23,9 @@ urlpatterns = [
     path('get_tenant_visit/',views.get_tenant_visit,name='tenant_visit_select'),
     path('get_deactivated_tenant/',views.get_deactivated_tenant,name='get_deactivated_tenant'),
     path('activate_tenant/',views.invoke_tenant),
+    path('add_rent/',views.add_rent_collected,name='add_rent'),
+    path('get_tenant_visit',views.get_tenant_visit,name='get_tenant_visit'),
+    path('check_allocation/',views.check_allocation,name='check_allocation'),
  
     
 ]

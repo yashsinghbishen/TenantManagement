@@ -812,3 +812,35 @@ $('.search_tenant').live('keyup',function () {
            
     });
 });
+
+
+//view Property allocation vise
+$('.propertyradio').live('click', function () {
+    var propertytype = $(this).attr('data-value');
+    $.get('/agent/Agent_Properties/', { propertytype: propertytype }, function (data) {
+        $('#propertylist').html(data);
+    })
+});
+
+//check if allocated and redirection for rent
+$('.add_rent').live('click', function () {
+    var pid = $(this).attr('data-pid');
+    var tid = $(this).attr('data-tid');
+    if(pid){
+    $.get('/agent/check_allocation/', { pid: pid },function(data)
+    {
+        if (data == "1"){
+            location.href = '/agent/add_rent/?pid='+pid;
+        }
+        else{
+            alert("This Propert's Agreement is under Process.");
+        }
+    });
+   
+    };
+    if(tid){
+    // $.get('/Agent/add_rent/', { tid: tid });
+    location.href = '/agent/add_rent/?tid='+tid;
+
+    };
+})

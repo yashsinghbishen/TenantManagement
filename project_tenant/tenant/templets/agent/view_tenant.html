@@ -33,9 +33,9 @@
             </div>
             <div class="modal-body">
                     <input type="hidden" id='id' data-id =''>
-                    Name : <input type="text" disabled id="tn_name" /></br></br>
+                    Name : <input type="text" disabled id="tn_name" style="width:100%"  /></br></br>
                     {% comment %} Status : <input type="text" disabled id="tn_status" /></br></br> {% endcomment %}
-                    New Status : <select name="status" id="tn_status" required>               
+                    New Status : <select name="status" style="width:100%" id="tn_status" required>               
                     <option value="0">Property Not Allocated</option>
                     <option value="1">Visit</option>
                     <option value="2">Deal Accepted,aggrement under process</option>
@@ -46,14 +46,14 @@
                     </br>
             </div>
             <div class="modal-body hidden">
-                Visited Properties: <select name="property" id="tenant_visit" class="hidden" required></br>
+                Visited Properties: <select name="property" id="tenant_visit" style="width:100%" class="hidden" required></br>
                     
                     </select>
                     
                     </br>
                     </br>
                     <div  id='tenant_rent' >
-                    Rent: <input id="rent" class='decimal_input' type ="number" name='rent'>  
+                    Final Decided Rent: <input id="rent" style="width:100%"  class='decimal_input' type ="number" name='rent'>  
                     </div>
                     </br>
             </div>

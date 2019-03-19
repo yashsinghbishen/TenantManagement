@@ -67,8 +67,22 @@ Add Tenent
           {% comment %} Enter Tenant Name:
           <input type="text" name="tenant_name" maxlength="25" id="id_tn_name"><br></br> {% endcomment %}
           Joining Date:
-<input type="date" name="date_joined" id="datenew" />
-<br/></br/>
+          <input type="date" name="date_joined" id="datenew" />
+          <script>
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+                if(dd<10){
+                        dd='0'+dd
+                    } 
+                    if(mm<10){
+                        mm='0'+mm
+                    } 
+                maxdate = yyyy+'-'+mm+'-'+dd;
+                document.getElementById("datenew").setAttribute("max", maxdate);
+          </script> 
+          <br/></br/>
           </div>
  
           <button class="btn btn-success btn-medium" type="submit" value="Submit" />Add Tenant</button>

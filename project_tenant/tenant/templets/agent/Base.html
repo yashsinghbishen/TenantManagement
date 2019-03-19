@@ -155,7 +155,7 @@ tbody tr {
 /* The Modal (background) */
 .modal {
         display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
+        position:fixed; /* Stay in place */
         z-index: 1; /* Sit on top */
         left: 0;
         top: 0;
@@ -170,7 +170,7 @@ tbody tr {
 .modal-content {
                 background-color: #ffece6;
                 margin: 15% 35%; /* 15% from the top and centered */
-                    padding: 60px;
+                    padding: 30px;
                 border: 5px solid #888;
                 width: 30%; /*Could be more or less, depending on screen size */
                 } 
@@ -253,14 +253,14 @@ tbody tr {
                 <div class="row">
                     <div class="span6"></div>
                     <div class="span6"> </div>
-                        <ul class="social-network">
+                        {% comment %} <ul class="social-network">
                             <li><a href="#" data-placement="bottom" title="Facebook"><i class="icon-facebook icon-white"></i></a></li>
                             <li><a href="#" data-placement="bottom" title="Twitter"><i class="icon-twitter icon-white"></i></a></li>
                             <li><a href="#" data-placement="bottom" title="Linkedin"><i class="icon-linkedin icon-white"></i></a></li>
                             <li><a href="#" data-placement="bottom" title="Pinterest"><i class="icon-pinterest  icon-white"></i></a></li>
                             <li><a href="#" data-placement="bottom" title="Google +"><i class="icon-google-plus icon-white"></i></a></li>
                             <li><a href="#" data-placement="bottom" title="Dribbble"><i class="icon-dribbble icon-white"></i></a></li>
-                        </ul>
+                        </ul> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -297,7 +297,7 @@ tbody tr {
                                         <ul class="dropdown-menu">
                                                 <li><a href="">Rent <i class="icon-angle-right"></i></a>
                                                     <ul class="dropdown-menu sub-menu-level1">
-                                                            <li><a href="">Add Rent Details</a></li>
+                                                            <li><a href="{% url 'add_rent' %}">Add Rent Details</a></li>
                                                             <li><a href="">View Rent Details</a></li>
                                                         </ul>
                                                 </li>

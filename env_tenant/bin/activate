@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Volumes/DATA/Tenant_Management/env_tenant"
+VIRTUAL_ENV="/Volumes/DATA/TM_system/env_tenant"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
